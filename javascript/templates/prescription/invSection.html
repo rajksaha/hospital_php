@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+            <h2 class="item-head link"><a href="" data-ng-click="invModal()"><label class="mainLabel">Investigation</label></a></h2>
+        </div>
+        <div data-ng-repeat="invData in prescribedInvData">
+            <a class="link" data-ng-click="deleteInvFromPresciption(invData.id)">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
+            <span>{{invData.invName}}</span>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <h2 class="item-head">
+            <a href="#/followUpChart"><label class="mainLabel">Clinical Record</label></a>
+        </h2>
+        <div data-ng-repeat="clinical in clinicalRecordList">
+            <span>{{clinical.code | date : 'dd/MM/yyyy'}}</span>
+            <div data-ng-repeat="followUp in clinical.followUpList">
+                <a class="link" data-ng-click="removeClinicalHistory(followUp)">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+                <span>{{followUp.detail}}</span>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+

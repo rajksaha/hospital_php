@@ -1,0 +1,29 @@
+<div class="modal-header modalHead ">
+	<h4 class="modal-title">Add Diagnosis</h4>
+</div>
+<div class="modal-body modalBody"  style="position:relative; z-index:1;">
+	<div class="alert alert-danger alert-dismissable" data-ng-show="error">
+        <div>{{errorMessage}}</div>
+        <div id="lblMsg_modal"></div>
+    </div>
+
+
+    		<div  class="row step4Width" id="validateReq">
+    			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+	   				<label>Diagnosis Name:</label>
+					<input type="text" maxlength="1000" ng-model="diagnosisData.diseaseName" typeahead="diagnosisNameData.name for diagnosisNameData in getDisease($viewValue)"  class="form-control required" placeholder="Disease" typeahead-on-select='onSelectDisease($item, $model, $label)'/>
+				</div>
+   			
+   			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="room-desc  form-group">	
+                       <label for="inputName">Detail</label>
+                       <input type="text" class="form-control input-sm" data-ng-model="diagnosisData.note" maxlength="1000" />
+				</div>
+    		</div >
+    	</div>
+	
+</div>
+<div class="modal-footer modalFoot">
+	<button class="btn btnLanier btn-success" data-ng-click="save()" ><span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save</button>
+	<button class="btn btnLanier btn-danger" data-ng-click="cancel()" ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancel</button>
+</div>

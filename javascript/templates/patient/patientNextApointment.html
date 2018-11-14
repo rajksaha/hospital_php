@@ -1,0 +1,118 @@
+<style type="text/css">
+	@media print {    
+		.no-print, .no-print * {
+			display: none !important;
+		}
+	}
+</style>
+<script>
+function printMe(){
+	content = $('#section-to-print').html();
+	w=window.open();
+	w.document.write(content);
+	w.print();
+	w.close();
+}
+</script>
+
+<div class="panel  col-md-12 filter-panel">
+    <div class="panel col-md-12 appointment">
+        <div class="col-md-12 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px">
+            <div  style="padding-top: 25px;">
+                <div class="col-xs-14  col-lg-14" >
+                    <div class="panelHead">	                 
+                        <div class="panelHead-body">
+                            <span>Appointed Patient List</b></span>
+                            <span class="pull-right">Total:{{numberOfAppointedPatient}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div>
+                <div class="col-xs-14 col-lg-14" >
+                    <div class="panelChild" style="background-color:#f5f5f5" id="section-to-print">
+                     <style type="text/css">
+						@media print {    
+						.no-print, .no-print * {
+							display: none !important;
+						}
+						.table {
+						background-color: transparent
+						}
+						th {
+							text-align: left
+						}
+						.table {
+							width: 100%;
+							max-width: 100%;
+							margin-bottom: 20px
+						}
+						.table>tbody>tr>td,
+						.table>tbody>tr>th,
+						.table>tfoot>tr>td,
+						.table>tfoot>tr>th,
+						.table>thead>tr>td,
+						.table>thead>tr>th {
+							padding: 8px;
+							line-height: 1.42857143;
+							vertical-align: top;
+							border-top: 1px solid #ddd
+						}
+						.table>thead>tr>th {
+							vertical-align: bottom;
+							border-bottom: 2px solid #ddd
+						}	
+							
+						.table-bordered {
+						 border: 1px solid #ddd;
+						}	
+						
+							
+						}
+					</style>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr> 
+                                <th colspan="7" style="text-align:center; font-weight:bold">Appointed Patient List of  <b>( {{nextDate}} )
+                                 <span class="pull-right no-print" ><a onclick="printMe()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a></span>
+                                </th> 
+                            </tr>
+                        </thead> 
+                        <thead>
+                            <tr> 
+                                <th>Patient ID</th> 
+                                <th>Patient Name</th> 
+                              <!--  <th>Type</th> -->
+                                <th>Visit</th>
+                                <th>Age</th> 
+                                <th>Gender</th> 
+								 
+								<th>Address</th>	
+								<th>Mobile No.</th>
+                                <!--<th>Dignosis</th>-->
+								
+                            </tr>
+                        </thead>
+                         <tbody>
+                             <tr data-ng-repeat="patientNextData in appointmentNextList"> 
+                                 <td>{{patientNextData.patientCode}}</td> 
+                                 <td>{{patientNextData.name}}</td> 
+                                 <!--<td>{{patientNextData.typeName}}</td>-->                                  
+                                 <td align="center">{{patientNextData.total_visit}}</td>                                 
+                                 <td align="center">{{patientNextData.age}}</td> 
+                                 <td>{{patientNextData.sex}}</td>  
+								
+								 <td>{{patientNextData.address}}</td>
+								 <td>{{patientNextData.phone}}</td>
+                                 <!--<td>{{patientNextData.diseaseName}}</td>--> 
+								 
+                             </tr> 
+                         </tbody> 
+                      </table>                            
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+		

@@ -1,0 +1,3 @@
+ALTER TABLE  `patient` ADD  `occupation` VARCHAR( 100 ) NOT NULL ,
+ADD  `referredBy` VARCHAR( 200 ) NOT NULL
+ALTER TABLE  `dose_period` CHANGE  `dose`  `dose` VARCHAR( 160 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

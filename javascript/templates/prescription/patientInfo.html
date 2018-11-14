@@ -1,0 +1,39 @@
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode" >Name: <span >{{patientData.name}}</span></label>
+    <input data-ng-show="patientData.editMode" data-ng-model="patientData.name" class="form-control required input-sm" />
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode" >Address: {{patientData.address}}</label>
+    <input data-ng-show="patientData.editMode" data-ng-model="patientData.address" class="form-control input-sm" maxlength="100" placeholder="Address" />
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode" >Age: {{patientData.age}} yrs</label>
+    <input data-ng-show="patientData.editMode" data-ng-model="patientData.age" class="form-control required input-sm" />
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode" >Sex: {{patientData.sex}}</label>
+    <select data-ng-show="patientData.editMode" data-ng-model="patientData.sex" class="form-control input-sm">
+        <option value="MALE">Male</option>
+        <option value="FEMALE">Female</option>
+        <option value="OTHER">Other</option>
+    </select>
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode">Reffered by: {{patientData.referredBy}}</label>
+    <input data-ng-show="patientData.editMode" data-ng-model="patientData.referredBy" class="form-control phnnr input-sm" maxlength="16" placeholder="Phone"/>
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 form-group">
+    <label data-ng-show="!patientData.editMode" >Occupation: {{patientData.occupation}}</label>
+    <select data-ng-show="patientData.editMode" data-ng-model="patientData.occupation" class="form-control input-sm">
+        <option value="HOUSEEWIFE">Housewife</option>
+        <option value="SERVICE">Service</option>
+        <option value="BUSINESS">Business</option>
+        <option value="STUDENT">Student</option>
+        <option value="NA">N/A</option>
+    </select>
+</div>
+<!---->
+<div id="source-button" data-ng-show="hoverState">
+    <a href="javascript:;" class="btn btn-circular btn-default" data-ng-click="editPatientInfo()"><i class="fa fa-pencil"></i></a>
+</div>
+

@@ -1,0 +1,41 @@
+<div class="large big" id="" >
+    <div class="modal-header">
+        <div class="col-sm-9 col-md-9 col-lg-9">
+			<h4 class="modal-title">History</h4>
+		</div>
+		<div class="col-sm-3 col-md-3 col-lg-3">
+		</div>
+
+	</div>
+	<div class="col-sm-14 col-md-14 col-lg-14">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="room-desc  form-group" >
+	<div class="modal-body modalBody"  style="position:relative; z-index:1;">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				<div class="alert alert-danger alert-dismissable" data-ng-show="error">
+					<div id="lblMsg"></div>
+				</div>
+				<div class="alert alert-success" data-ng-show="succcess">
+					<div>{{message}}</div>
+				</div>
+				<tabset class="form-group" >
+					<tab data-ng-repeat="history in historyList"  heading="{{history.name}}" data-ng-click="changeTab(history)">
+						<div data-ng-if="history.id == 1" ng-include="'javascript/templates/history/pastDisease.html'"></div>
+						<div data-ng-if="history.id == 2" ng-include="'javascript/templates/history/familyHistory.html'"></div>
+						<div data-ng-if="history.id == 3" ng-include="'javascript/templates/history/drugHistory.html'"></div>
+						<div data-ng-if="history.id != 1 && history.id != 2 && history.id != 3" ng-include="'javascript/templates/history/dynamicHistory.html'"></div>
+					</tab>
+				</tabset>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="modal-footer modalFoot">
+		<button class="btn btnLanier btn-success" data-ng-click="prescription()" ><span class="fa fa-thumbs-o-up " aria-hidden="true"></span> Done</button>
+	</div>
+</div>
+
+
+

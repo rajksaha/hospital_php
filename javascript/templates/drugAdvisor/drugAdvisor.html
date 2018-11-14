@@ -1,0 +1,75 @@
+
+
+
+
+<div class="row">
+	<div class="col-sm-6 col-md-6 col-lg-6">
+
+		<label>Drug Advice</label>
+		<button  title="ADD" data-ng-show="masterUpdate" class="btn btn-primary pull-right" data-ng-click="addDrugAdvice()">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"> ADD</span>
+		</button>
+		<table class="table table-condensed table-bordered">
+			<thead class="">
+			<tr >
+				<th width="40%"><strong>Bangla</strong></th>
+				<th width="15%">
+					<strong>Action</strong>
+
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="" data-ng-repeat="data in drugAdviceList">
+				<td >
+					<div class="form-group" data-ng-show="data.editMode">
+						<input type="text" data-ng-model="data.bangla"  class="form-control" placeholder="type bangla"/>
+					</div>
+					<span data-ng-show="!data.editMode">{{data.bangla}}</span>
+				</td>
+				<td>
+					<button title="Save" data-ng-show="data.editMode" class="btn btn-primary" data-ng-click="saveDrugAdvice(data)">
+						<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+					</button>
+					<button title="Edit" data-ng-show="!data.editMode && !data.otherEditMode" class="btn btn-danger" data-ng-click="delDrugAdvice(data)">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-sm-6 col-md-6 col-lg-6">
+		<label>Drug When</label>
+		<button  title="ADD" data-ng-show="masterUpdate" class="btn btn-primary pull-right" data-ng-click="addDrugWhen()">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"> ADD</span>
+		</button>
+		<table class="table table-condensed table-bordered">
+			<thead >
+			<tr >
+				<th width="40%"><strong>Bangla</strong></th>
+				<th width="15%"><strong>Action</strong></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="" data-ng-repeat="data in drugWhenList" style="height: 50px;cursor: pointer;">
+				<td >
+					<div class="form-group" data-ng-show="data.editMode">
+						<input type="text" data-ng-model="data.bangla"  class="form-control" placeholder="type bangla" data-ng-change="convertToUniCode(data)"/>
+					</div>
+					<span data-ng-show="!data.editMode">{{data.bangla}}</span>
+				</td>
+				<td id="">
+
+					<button title="Save" data-ng-show="data.editMode" class="btn btn-primary" data-ng-click="saveDrugWhen(data)">
+						<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+					</button>
+					<button title="Edit" data-ng-show="!data.editMode && !data.otherEditMode" class="btn btn-danger" data-ng-click="delDrugWhen(data)">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

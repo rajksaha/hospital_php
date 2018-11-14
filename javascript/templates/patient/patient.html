@@ -1,0 +1,173 @@
+<style type="text/css">
+	@media print {    
+		.no-print, .no-print * {
+			display: none !important;
+		}
+	}
+</style>
+<script>
+function printMe(){
+	content = $('#section-to-print').html();
+	w=window.open();
+	w.document.write(content);
+	w.print();
+	w.close();
+}
+</script>
+
+<div class="panel  col-md-12 filter-panel">
+    <section  data-ng-show="true" class=" contacts row" id="generalInfoContact">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="disease = true" placeholder="Search By Disease" typeahead="disease.name for disease in bringByDiseaseShow($viewValue)"  close-text="Close" ng-model="Disease" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByDisease(Disease)" data-ng-show="disease">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="patientCode = true" placeholder="Search By Patient Type" typeahead="patient.name for patient in bringShowType($viewValue)"  close-text="Close" ng-model="PType" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientType(PType)" data-ng-show="patientCode">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="diseaseww = true" placeholder="Search By Drug" typeahead="patient.name for patient in bringShowDname($viewValue)"  close-text="Close" ng-model="namee" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientName(namee)" data-ng-show="diseaseww">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <button class="btn btn-primary" data-ng-click="bringAllPatient()" >All Patient </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="panel  col-md-12 filter-panel">
+    <div class="panel col-md-12 appointment">
+        <div class="col-md-12 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px">
+            <div  style="padding-top: 25px;">
+                <div class="col-xs-14  col-lg-14" >
+                    <div class="panelHead">	                 
+                        <div class="panelHead-body">
+                            <span>Patient List</b></span>
+                            <span class="pull-right">Total:{{numberOfPatient}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div>
+                <div>
+                <div class="col-xs-14 col-lg-14" >
+                    <div class="panelChild" style="background-color:#f5f5f5" id="section-to-print">
+					 <style type="text/css">
+                        @media print {    
+                        .no-print, .no-print * {
+                            display: none !important;
+                        }
+                        .table {
+                        background-color: transparent
+                        }
+                        th {
+                            text-align: left
+                        }
+                        .table {
+                            width: 100%;
+                            max-width: 100%;
+                            margin-bottom: 20px
+                        }
+                        .table>tbody>tr>td,
+                        .table>tbody>tr>th,
+                        .table>tfoot>tr>td,
+                        .table>tfoot>tr>th,
+                        .table>thead>tr>td,
+                        .table>thead>tr>th {
+                            padding: 8px;
+                            line-height: 1.42857143;
+                            vertical-align: top;
+                            border-top: 1px solid #ddd
+                        }
+                        .table>thead>tr>th {
+                            vertical-align: bottom;
+                            border-bottom: 2px solid #ddd
+                        }	
+                            
+                        .table-bordered {
+                         border: 1px solid #ddd;
+                        }	
+                        a{
+							text-decoration:none;
+							color:#000;}
+                            
+                        }
+                    </style>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr> 
+                                <th colspan="9" style="text-align:center; font-weight:bold">Patient List 
+                                 <span class="pull-right no-print" ><a onclick="printMe()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a></span>
+                                </th> 
+                            </tr>
+                        </thead> 
+                        <thead>
+                            <tr> 
+								<th>Date(Y/M/D)</th>
+                                <th>Patient ID</th> 
+                                <th>Patient Name</th> 
+                                <!--<th>Type</th>--> 
+                                <th>Visit</th>
+                                <th>Age</th> 
+                                <th>Gender</th> 
+								<th>Mobile No.</th>
+								<th>Address</th>
+                                <th>Dignosis</th> 
+                                 
+								
+								
+                            </tr>
+                        </thead>
+                         <tbody> 
+                             <tr data-ng-repeat="patientData in patientList"> 
+								<td>{{patientData.date}}</td>
+                                 <td>{{patientData.patientCode}}</td> 
+                                 <td>{{patientData.name}}</td> 
+                                 <!--<td>{{patientData.typeName}}</td>-->                                  
+                                 <td align="center">{{patientData.total_visit}}</td>                                 
+                                 <td align="center">{{patientData.age}}</td> 
+                                 <td>{{patientData.sex}}</td> 
+								 <td>{{patientData.phone}}</td>
+								 <td>{{patientData.address}}</td>
+                                 <td>{{patientData.diseaseName}}</td> 
+                                  
+								  
+								  
+                             </tr> 
+                         </tbody> 
+                      </table>                                
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+		

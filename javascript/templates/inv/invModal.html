@@ -1,0 +1,100 @@
+<div class="large big" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-header">
+        <div class="col-sm-9 col-md-9 col-lg-9">
+            <h4 class="modal-title">Investigation</h4>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <button class="btn btnLanier btn-success" data-ng-click="prescription(1)" ><span class="fa fa-thumbs-o-up " aria-hidden="true"></span> Done</button>
+            <button class="btn btn-info pull-right" data-ng-click="docTorINVSetter = !docTorINVSetter"><span class="glyphicon glyphicon glyphicon-wrench" aria-hidden="true"></span> Setteing</button>
+        </div>
+    </div>
+    <div class="modal-body modalBody"  style="position:relative; z-index:1;">
+        <div class="alert alert-danger alert-dismissable" data-ng-show="error">
+            <div>{{errorMessage}}</div>
+            <div id="lblMsg_modal"></div>
+        </div>
+
+
+        <div  class="row" id="validateReq">
+            <section  data-ng-show="docTorINVSetter" class=" contacts row" id="generalInfoContact">
+                <div  class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="text-muted form-group">By Name</div>
+                            <div class="room-desc">
+                                <input type="text" data-ng-model="invName" typeahead="invNameData.name for invNameData in getInvName($viewValue)"  class="form-control" placeholder="Add Inv to Setting" typeahead-on-select='onSelectInvName($item, $model, $label)'/>
+                            </div>
+                                <button  data-ng-click="addToDoctorPreference(false)" class="btn btnLanier btn-success" data-ng-click="save(true)" ><span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save</button>
+                                <button  data-ng-click="addToDoctorPreference(true)" class="btn btnLanier btn-success" data-ng-click="save(true)" ><span class="fa fa-plus-square-o" aria-hidden="true"></span> Save and Another</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	</section>
+
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <select  class="form-control" id="drugTypeAdder" data-ng-model="invCategoryID" data-ng-options="category.invCategoryID as category.name for category in invCategoryList" >
+                    <option value="">--Select--</option>
+                </select>
+                <hr>
+                <div class="row">
+                    <div class="list-item col-sm-6 col-md-6 col-lg-6" data-ng-repeat="inv in invSettingData | filter : colorFilter">
+                        <span class="glyphicons glyphicon glyphicon-remove" aria-hidden="true" data-ng-click="delINVFromSetting(inv.invSettingID, $index)"></span>
+                        <button class="btn btn-default" data-ng-model="none"   data-ng-click="addORDelINV(!inv.addedToPrescription,inv)">
+                            <span class="glyphicon  glyphicon"  data-ng-class="{'glyphicon-check': inv.addedToPrescription == true,'glyphicon-unchecked': inv.addedToPrescription == false}"></span>
+                        </button>
+                        <span style="font-size: 14px !important;">{{inv.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="text-muted form-group">Prescribed INV
+                    <span class="pull-right">
+                        <span>
+                            <button  style="padding-left:12px;" class="btn btn-info" data-ng-click="addInvToPrescription()">
+                                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                            </button>
+                        </span>
+                    </span>
+                </div>
+                <div id="appList" scroller="addMoreItems()">
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr >
+                            <th width="5%"><strong>Sl.</strong></th>
+                            <th width="50%"><strong>Inv Name</strong></th>
+                            <th width="30%"><strong>Note</strong></th>
+                            <th width="10%"><strong>Action</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="invData in prescribedInvData">
+                            <td>
+                                {{$index + 1}}
+                            </td>
+
+                            <td >
+                                <span>{{invData.invName}}</span>
+                            </td>
+                            <td >
+                                <span>{{invData.note}}</span>
+                            </td>
+                            <td >
+                                <button class="btn btn-primary" data-ng-click="editFromPresciption(invData)">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+                                <span class="btn btn-danger btn-sm btnLanier fa fa-trash" data-ng-click="deleteInvFromPresciption(invData.id)"></span>
+                                </a>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

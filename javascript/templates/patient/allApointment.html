@@ -1,0 +1,192 @@
+<style type="text/css">
+	@media print {    
+		.no-print, .no-print * {
+			display: none !important;
+		}
+	}
+</style>
+<script>
+function printMe(){
+	content = $('#section-to-print').html();
+	w=window.open();
+	w.document.write(content);
+	w.print();
+	w.close();
+}
+</script>
+
+
+<div class="panel  col-md-12 filter-panel">
+    <section  data-ng-show="true" class=" contacts row" id="generalInfoContact">
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" id="the-basics" >
+                        <input type="text"  class="form-control date" data-ng-change="addByDatee = true" placeholder="Appointment Date" datepicker-popup="dd/MM/yyyy" close-text="Close" is_open="dt1" ng-focus="dt1 = true" ng-model="appointmentDatesingle" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByDatesing(appointmentDatesingle)" data-ng-show="addByDatee">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+             <div class="panel panel-default">	                 
+                 <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" id="the-basics" >
+                    <input type="text"  class="form-control date" placeholder="Appointment From" datepicker-popup="dd/MM/yyyy" close-text="Close" is_open="dt2" ng-focus="dt2 = true" ng-model="appointmentDate" is-open="false"/>
+                    </div>                                   
+                 </div>
+             </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+             <div class="panel panel-default">	                 
+                 <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" id="the-basics" >
+                    <input type="text"  class="form-control date" placeholder="Appointment To" data-ng-change="addByDate = true" datepicker-popup="dd/MM/yyyy" close-text="Close" is_open="dt3" ng-focus="dt3 = true" ng-model="endDate"  is-open="false"/>
+                    <button class="btn btn-primary" data-ng-click="bringByDate(appointmentDate , endDate)" data-ng-show="addByDate">
+                        <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="disease = true" placeholder="Search By Disease" typeahead="disease.name for disease in bringByDiseaseShow($viewValue)"  close-text="Close" ng-model="Disease" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByDisease(Disease)" data-ng-show="disease">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="patientCode = true" placeholder="Search By ID" typeahead="appointment.patientCode for appointment in BringByPatientID($viewValue)"  close-text="Close" ng-model="PCode" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientAddd(PCode)" data-ng-show="patientCode">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="diseaseww = true" placeholder="Search By Drug" typeahead="patient.name for patient in bringShowDname($viewValue)"  close-text="Close" ng-model="namee" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientName(namee)" data-ng-show="diseaseww">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>    
+<div class="panel  col-md-12 filter-panel">
+    <div class="panel col-md-12 appointment">
+        <div class="col-md-12 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px">
+            <div  style="padding-top: 25px;">
+                <div class="col-xs-14  col-lg-14" >
+                    <div class="panelHead">	                 
+                        <div class="panelHead-body">
+                            <span>Appointment List</b></span>
+                            <span class="pull-right">Total:{{numberOfAppointment}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div>
+                <div class="col-xs-14 col-lg-14" >
+                    <div class="panelChild" style="background-color:#f5f5f5" id="section-to-print">
+					 <style type="text/css">
+                        @media print {    
+                        .no-print, .no-print * {
+                            display: none !important;
+                        }
+                        .table {
+                        background-color: transparent
+                        }
+                        th {
+                            text-align: left
+                        }
+                        .table {
+                            width: 100%;
+                            max-width: 100%;
+                            margin-bottom: 20px
+                        }
+                        .table>tbody>tr>td,
+                        .table>tbody>tr>th,
+                        .table>tfoot>tr>td,
+                        .table>tfoot>tr>th,
+                        .table>thead>tr>td,
+                        .table>thead>tr>th {
+                            padding: 8px;
+                            line-height: 1.42857143;
+                            vertical-align: top;
+                            border-top: 1px solid #ddd
+                        }
+                        .table>thead>tr>th {
+                            vertical-align: bottom;
+                            border-bottom: 2px solid #ddd
+                        }	
+                            
+                        .table-bordered {
+                         border: 1px solid #ddd;
+                        }	
+                        a{
+							text-decoration:none;
+							color:#000;}
+                            
+                        }
+                    </style>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr>
+                                <th colspan="9" style="text-align:center; font-weight:bold">Patient List 
+                                 <span class="pull-right no-print" ><a onclick="printMe()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a></span>
+                                </th> 
+                            </tr>
+                        </thead> 
+                        <thead>
+                            <tr> 
+								<th>Date(Y/M/D)</th>
+                                <th>Patient ID</th> 
+                                <th>Patient Name</th> 
+                                <!--<th>Type</th> --> 
+                                <th>Visit</th> 
+                                <th>Age</th> 
+                                <th>Gender</th> 
+                              <th>Address</th>
+                                <th>Mobile No.</th>
+                               <th>Dignosis</th> 
+							    
+                            </tr>
+                        </thead>
+                         <tbody> 
+                             <tr data-ng-repeat="appointmentData in appointmentList"> 
+								<td>{{appointmentData.date}}</td>
+                                 <td>{{appointmentData.patientCode}}</td> 
+                                 <td><a href="javascript:void(0)"  data-ng-click="printPreview(appointmentData)">{{appointmentData.name}}</a></td>
+                               <!-- <td>{{appointmentData.typeName}}</td>-->   
+                                 <td>{{appointmentData.total_visit}}</td>                                 
+                                 <td align="center">{{appointmentData.age}}</td> 
+                                 <td>{{appointmentData.sex}}		</td> 
+                                <td>{{appointmentData.address}}	</td>
+                                  <td>{{appointmentData.phone}}</td>
+                                 <td>{{appointmentData.diseaseName}}</td>
+								 
+                                 </td>
+                             </tr> 
+                         </tbody> 
+                      </table>                                
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
