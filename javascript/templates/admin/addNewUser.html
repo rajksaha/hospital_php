@@ -1,0 +1,58 @@
+<div class="modal-header modalHead ">
+	<h4 class="modal-title">User Information</h4>
+</div>
+<div class="modal-body modalBody"  style="position:relative; z-index:1;">
+	<div class="alert alert-danger alert-dismissable" data-ng-show="error">
+        <div>{{errorMessage}}</div>
+        <div id="lblMsg_modal"></div>
+    </div>
+    	<div  class="row" id="validateReq">
+			<div class="panel">
+				<div class="panel-body">
+					<div class="form-group col-md-4">
+						<label>User Full Name: <span class="red" >*</span></label>
+						<input type="text" class="form-control required" data-ng-model="userProfile.fullName" errmsg="Please enter full name" maxlength="40">
+					</div>
+
+					<div class="form-group col-md-4" >
+						<label>Login Name: <span class="red" >*</span></label>
+						<input class="form-control required" type="text" maxlength="55" data-ng-model="userProfile.username" errmsg="Please enter login name for user">
+					</div>
+
+					<div class="form-group col-md-4">
+						<label>Password:</label>
+						<input class="form-control required" type="text" maxlength="55" data-ng-model="userProfile.password" errmsg="Please enter password">
+					</div>
+				</div>
+			</div>
+			<div data-ng-repeat="access in userProfile.accessList">
+				<div class="form-group col-md-4">
+
+					<div class="bs-component">
+						<div class="card">
+							<div class="card-content">
+								<div class="pull-right"></div> {{access.accessDesc}}</div>
+							<div class="card-image">
+								<div data-ng-repeat="subAccess in access.subAccessList">
+									<div class="checkbox-s">
+										<input id="{{subAccess.accessID}}" type="checkbox" name="access_c_box" data-ng-click="changeStatus(subAccess)" ng-checked="subAccess.haveAccess == true">
+										<label for="{{subAccess.accessID}}">{{subAccess.accessDesc}}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+    	</div>
+	
+</div>
+<div class="modal-footer modalFoot">
+	<button class="btn btnLanier btn-success" data-ng-click="save()" >
+		<span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save
+	</button>
+	<button class="btn btnLanier btn-danger" data-ng-click="cancel()" >
+		<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancel
+	</button>
+</div>

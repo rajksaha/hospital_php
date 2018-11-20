@@ -74,9 +74,7 @@ else if($query_no==4){
 	$result  = getAppointmentInfo($appointmentNO);
 	
 	$rec=mysql_fetch_assoc($result);
-	
-	
-	
+
 	echo json_encode($rec);
 	
 }else if($query_no==5){

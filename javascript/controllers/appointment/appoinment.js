@@ -21,7 +21,20 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
  	
     $scope.bringDoctorInfo = function (){
     	
-        var dataString = "query=0";
+        var dataString = "query=2";
+
+        $http({
+            method: 'POST',
+            url: "phpServices/admin/adminModuleService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.userAccessInfo = result;
+        }, function(error){
+            $location.path("/login");
+        });
+
+        dataString = "query=0";
 
         $http({
             method: 'POST',
@@ -336,6 +349,4 @@ app.controller('AppointmentController.AddNewPatientController', function($scope,
 	$scope.cancel = function (){
 		$modalInstance.dismiss('cancel');
 	};
-	
-	
 });

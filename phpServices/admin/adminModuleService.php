@@ -5,12 +5,14 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username = $_SESSION['username'];
+$userID = $_SESSION['userID'];
+$userType = $_SESSION['userType'];
 $doctorID = $_SESSION['doctorID'];
 $date=date("Y-m-d");
 $query_no=  $_POST['query'];
 
 
-if($query_no== 0){	
+if($query_no== 0){
 	$sql = mysql_query("SELECT * FROM `user_profile` WHERE `doctorID` = $doctorID");
 	$data = array();
 	while ($row=mysql_fetch_array($sql)){
@@ -18,32 +20,28 @@ if($query_no== 0){
 	}
 	echo json_encode($data);
 }elseif ($query_no == 1){
-	$user_id = $_POST['user_id'];
-	$sql = "SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId` 
+	$user_id = $_POST['userId'];
+	$sql = mysql_query("SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId`,
+            CASE WHEN ua.`userAccessId` IS NULL THEN 0 ELSE 1 END AS haveAccess 
             FROM `app_access` aa 
-            LEFT JOIN user_access ua ON ua.`accessID` = aa.`accessID`
-            WHERE ua.`userID` =  $user_id";
+            LEFT JOIN user_access ua ON ua.`accessID` = aa.`accessID` AND ua.`userID` =  $user_id ");
+
+    $data = array();
+
     while ($row=mysql_fetch_array($sql)){
         array_push($data,$row);
     }
     echo json_encode($data);
 }elseif ($query_no == 2){
-    $user_id = $_POST['user_id'];
+    echo json_encode($userType);
+}elseif ($query_no == 3){
     $sql = "SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId` 
             FROM `app_access` aa 
             JOIN user_access ua ON ua.`accessID` = aa.`accessID`
-            WHERE ua.`userID` =  $user_id";
+            WHERE ua.`userID` =  $userID";
     while ($row=mysql_fetch_array($sql)){
         array_push($data,$row);
     }
-    echo json_encode($data);
-}elseif ($query_no == 3){
-    $user_id = $_POST['user_id'];
-
-    // create user profile
-    //create user access
-
-
     echo json_encode($data);
 }else if ($query_no == 4){
 
@@ -52,6 +50,23 @@ if($query_no== 0){
 
     mysql_query("DELETE FROM `user_access` WHERE `userID` = $user_id ");
     //create user access
+}else if ($query_no == 4){
+
+    //update user profile
+    //delete user access
+
+    mysql_query("DELETE FROM `user_access` WHERE `userID` = $user_id ");
+    //create user access
+}elseif ($query_no == 5){
+    $sql = "SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID` , 1 as haveAccess
+            FROM `app_access` aa where 1 = 1 ";
+
+    $result=mysql_query($sql);
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+    echo json_encode($data);
 }
 
 ?>

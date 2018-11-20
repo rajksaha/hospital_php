@@ -414,7 +414,7 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                             'javascript/controllers/drugAdvisor/drugAdvisorController.js',
                             'javascript/controllers/followUpSetup/followUpSetupController.js',
 							'javascript/controllers/symptom/symptomModificationController.js',
-                            'javascript/controllers/admmin/adminModuleController.js',
+                            'javascript/controllers/admin/adminModuleController.js',
 							'javascript/controllers/disease/diseaseModificationController.js'
 							
                         ]
