@@ -219,7 +219,7 @@ function getPatientOldPrecription($appointmentID, $patientID, $doctorCode){
 	return $result;
 }
 
-function getDoctorsDrugSettingByDisease($doctorCode, $diseaseID){
+function getDoctorsDrugSettingByDisease($doctorID, $diseaseID){
 	
 	
 	$result = mysql_query("SELECT sd.`id` , sd.`doctorID` , sd.`diseaseID` , sd.`drugTypeID` , sd.`drugID` , sd.`drugTimeID`  , sd.`drugDoseUnit` , sd.`drugWhenID` , sd.`drugAdviceID` , dt.initial AS typeInitial, d.drugName AS drugName, d.strength AS drugStrength, dwt.bangla AS whenTypeName, dat.bangla AS adviceTypeName
@@ -228,36 +228,34 @@ function getDoctorsDrugSettingByDisease($doctorCode, $diseaseID){
 							JOIN drug d ON sd.drugID = d.drugID
 							JOIN drugadvicetype dat ON sd.drugAdviceID = dat.id
 							JOIN drugwhentype dwt ON sd.`drugWhenID` = dwt.id
-							JOIN doctor doc ON sd.doctorID = doc.doctorID
-			WHERE  doc.doctorCode = '$doctorCode' AND sd.diseaseID = '$diseaseID'");
+			WHERE  sd.doctorID = $doctorID AND sd.diseaseID = '$diseaseID'");
 	
 	return $result;
 	
 	
 }
 
-function getDoctorsInvSettingByDisease($doctorCode, $diseaseID){
+function getDoctorsInvSettingByDisease($doctorID, $diseaseID){
 
 
 	$result = mysql_query("SELECT si.`id`, si.`doctorID`, si.`diseaseID`, si.`invID`, si.`note`, i.name AS invName
 						FROM `settings_inv` si
-						JOIN doctor d ON si.doctorID = d.doctorID
 						JOIN inv i ON si.invID = i.id
-						WHERE  d.doctorCode = '$doctorCode' AND si.diseaseID = '$diseaseID'");
+						WHERE  si.doctorID = $doctorID AND si.diseaseID = '$diseaseID'");
 
 	return $result;
 
 
 }
 
-function getDoctorsAdviceSettingByDisease($doctorCode, $diseaseID){
+function getDoctorsAdviceSettingByDisease($doctorID, $diseaseID){
 
 
 	$result = mysql_query("SELECT sa.`id`, sa.`doctorID`, sa.`diseaseID`, sa.`adviceID`, a.advice
 						FROM `settings_advice` sa
 						JOIN doctor d ON sa.doctorID = d.doctorID
 						JOIN advice a ON sa.`adviceID` = a.id	
-						WHERE  d.doctorCode = '$doctorCode' AND sa.diseaseID = '$diseaseID'");
+						WHERE sa.doctorID = $doctorID AND sa.diseaseID = '$diseaseID'");
 
 	return $result;
 

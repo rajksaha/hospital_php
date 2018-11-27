@@ -12,6 +12,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username = $_SESSION['username'];
+$doctorId = $_SESSION['doctorID'];
 
 if (isset($_SESSION['appointmentID'])) {
 	$appointmentID = $_SESSION['appointmentID'];
@@ -53,7 +54,7 @@ elseif ($query_no == 2){
 	
 	insertPrescribedDiagnosis($appointmentID, $diseaseID, $note);
 	
-	addToPrescriptionSetings($diseaseID, $username, $appointmentID);
+	addToPrescriptionSetings($diseaseID, $doctorId, $appointmentID);
 	
 	
 }

@@ -32732,8 +32732,8 @@ function checkForPageChange($yaxis, $pageNum){
     }
     return $yaxis;
 }
- function displayImage ($username, $patientImage,$xAxis, $yAxis, $size){
-        $doctorData = getDoctorInfo($username);
+ function displayImage ($doctorId, $patientImage,$xAxis, $yAxis, $size){
+        $doctorData = getDoctorInfo($doctorId);
 
         if($doctorData['photoSupport'] == 1){
             $this->Image('../'.$patientImage, $xAxis, $yAxis, 32, 40, '', '', true);

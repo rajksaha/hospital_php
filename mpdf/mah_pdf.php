@@ -21,9 +21,9 @@ function Footer() {
 	//$this -> image ('doc1.png',10,260,185,25,'png','',true, false);
 }
 
-function showDocInfo($username, $yAxis, $size){
+function showDocInfo($doctorId, $yAxis, $size){
 
-	$resultData = getDoctorInfo($username);
+	$resultData = getDoctorInfo($doctorId);
 	
 	
 

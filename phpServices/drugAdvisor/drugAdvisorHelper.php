@@ -9,6 +9,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username=$_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $date=date("Y-m-d");
 
 $json = file_get_contents('php://input');
@@ -26,7 +27,7 @@ if($query_no==1){
 			FROM `drugAdviceType` dat
 			LEFT JOIN doctorsettings ds ON dat.doctorType = ds.category
 			JOIN doctor d ON d.doctorID = ds.doctorID
-			WHERE d.doctorCode = '$username'";
+			WHERE ds.doctorID = $doctorID ";
 	$result=mysql_query($sql);
 	
 	$data = array();

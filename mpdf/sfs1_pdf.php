@@ -3,6 +3,7 @@ include("BasicFunction.php");
 session_start();
 include('../phpServices/config.inc');
 $username=$_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $appointmentID = $_SESSION['printAppointmentID'];
 $patientCode = $_SESSION['printPatientCode'];
 $date = date('d M, Y');
@@ -197,7 +198,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
 	
 	$resultData = getPatientInformaition($patientCode);
 	
-	$visitData = getPdfDetail($patientCode, "sfs");
+	$visitData = getPdfDetail($patientCode, 16);
 	
 	$rec1 = mysql_fetch_assoc($visitData);
 	
@@ -541,7 +542,6 @@ $appType = $appData['appointmentType'];
 $size = 11;
 $maxX = 65;
 
-//$pdf->ShowPatInfo($patientCode,46,$username);
 $linestyle = array('width' => 20, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(255, 0, 0));
 $pdf->Line(5, 53, 205, 53, $linestyle);
 //$pdf->Line(5, 40, 205, 40, $linestyle);
@@ -576,7 +576,7 @@ $rightYaxis = $pdf-> show_ref_doc($appointmentID,$rightXaxis, $rightYaxis + 10, 
 if($appType != 4){
 	
 	if($patientImage != null){
-		$pdf->displayImage($username, $patientImage,$leftXaxis,$vitalEnds,$photoSize);
+		$pdf->displayImage($doctorID, $patientImage,$leftXaxis,$vitalEnds,$photoSize);
 		$gap = $gap + $photoSize;
 	}
 }

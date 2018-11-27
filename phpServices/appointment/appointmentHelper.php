@@ -14,6 +14,7 @@ $query_no=  $_POST['query'];
 $time_now=mktime(date('h')+6,date('i'),date('s'));
 $time=date('h:i:s',$time_now);
 $date=date("y-m-d");
+$doctorID = $_SESSION['doctorID'];
 
 if($query_no== 0){
 
@@ -23,7 +24,7 @@ if($query_no== 0){
 					FROM doctor d
 					JOIN doctorsettings ds ON d.doctorID = ds.doctorID
 					JOIN doctorcategory dc ON ds.category = dc.id
-					WHERE d.doctorCode ='$username'");
+					WHERE d.doctorID =$doctorID");
 	$rec=mysql_fetch_array($sql);
 	echo json_encode($rec);
 }
@@ -31,30 +32,30 @@ if($query_no== 0){
 if($query_no==1){
 
 	$filteredDate = $_POST['filteredDate'];
-	echo getAppointment($username, $filteredDate);
+	echo getAppointment($doctorID, $filteredDate);
 }
 
 if($query_no==11){
 
 	$filteredDate = $_POST['filteredDate'];
-	echo getNextDateAppointment($username, $filteredDate);
+	echo getNextDateAppointment($doctorID, $filteredDate);
 }
 
 
 if($query_no==13){
 	$type_search_str = $_POST['filteredDate'];
-	echo getAppointmentByPatientType($username, $type_search_str);
+	echo getAppointmentByPatientType($doctorID, $type_search_str);
 }
 
 if($query_no==14){
-	echo getAllPatient($username);
+	echo getAllPatient($doctorID);
 }
 
 if($query_no==15){
 
 	$disease_search_str = $_POST['filteredDate'];
 
-	echo getPatientByDisease($username, $disease_search_str);
+	echo getPatientByDisease($doctorID, $disease_search_str);
 	
 }
 
@@ -63,7 +64,7 @@ if($query_no==16){
 
 	$drug_search_str = $_POST['filteredDate'];
 
-	echo getPatientByDrugs($username, $drug_search_str);
+	echo getPatientByDrugs($doctorID, $drug_search_str);
 }
 
 
@@ -73,7 +74,7 @@ if($query_no==981){
 
 	$disease_search_str = $_POST['filteredDate'];
 
-	echo getAppointmentByDisease($username, $disease_search_str);
+	echo getAppointmentByDisease($doctorID, $disease_search_str);
 	
 }
 
@@ -82,7 +83,7 @@ if($query_no==888){
 
 	$filteredDate = $_POST['filteredDate'];
 
-	echo PatientAddd($username, $filteredDate);
+	echo PatientAddd($doctorID, $filteredDate);
 }
 
 
@@ -90,7 +91,7 @@ if($query_no==999){
 
 	$drug_search_str = $_POST['filteredDate'];
 
-	echo getAppointmentByDrugs($username, $drug_search_str);
+	echo getAppointmentByDrugs($doctorID, $drug_search_str);
 }
 
 if($query_no==99){
@@ -98,7 +99,7 @@ if($query_no==99){
 	$filteredDate = $_POST['filteredDate'];
 	$endDate= $_POST['endDate'];
 
-	echo getAppointmentByDateRange($username, $filteredDate, $endDate);
+	echo getAppointmentByDateRange($doctorID, $filteredDate, $endDate);
 }
 
 if($query_no==2){

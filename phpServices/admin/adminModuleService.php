@@ -33,16 +33,27 @@ if($query_no== 0){
     }
     echo json_encode($data);
 }elseif ($query_no == 2){
-    echo json_encode($userType);
-}elseif ($query_no == 3){
-    $sql = "SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId` 
+
+    $sql = mysql_query("SELECT * FROM `user_profile` WHERE `userID` = $userID");
+    $rec=mysql_fetch_assoc($sql);
+    $temp = $rec['fullName'];
+    $userProfile->fullName = $temp;
+    if($userType != 'DOCTOR'){
+        $sql = mysql_query("SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId` 
             FROM `app_access` aa 
             JOIN user_access ua ON ua.`accessID` = aa.`accessID`
-            WHERE ua.`userID` =  $userID";
-    while ($row=mysql_fetch_array($sql)){
-        array_push($data,$row);
+            WHERE ua.`userID` =  $userID");
+        $data = array();
+        while ($row=mysql_fetch_array($sql)){
+            array_push($data,$row);
+        }
+        $userProfile->accessList = $data;
+        echo json_encode($userProfile);
+    }else{
+        echo json_encode($userProfile);
     }
-    echo json_encode($data);
+}elseif ($query_no == 3){
+
 }else if ($query_no == 4){
 
     //update user profile

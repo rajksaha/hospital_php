@@ -10,6 +10,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username=$_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $date=date("Y-m-d");
 $appointmentID = $_SESSION['appointmentID'];
 $patientCode = $_SESSION['patientCode'];

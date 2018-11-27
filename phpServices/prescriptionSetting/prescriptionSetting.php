@@ -11,6 +11,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username = $_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $date=date("Y-m-d");
 $query_no=  mysql_real_escape_string($_POST['query']);
 
@@ -18,7 +19,7 @@ if($query_no == 0){
 
 	$diseaseID = $_POST['diseaseID'];
 	
-	$result = getDoctorsDrugSettingByDisease($username, $diseaseID);
+	$result = getDoctorsDrugSettingByDisease($doctorID, $diseaseID);
 
     $data = array();
     while ($row=mysql_fetch_array($result)){
@@ -34,7 +35,7 @@ if($query_no == 1){
 
 	$diseaseID = $_POST['diseaseID'];
 
-	$result = getDoctorsInvSettingByDisease($username, $diseaseID);
+	$result = getDoctorsInvSettingByDisease($doctorID, $diseaseID);
 	
 	$data = array();
 	while ($row=mysql_fetch_array($result)){
@@ -48,7 +49,7 @@ if($query_no == 2){
 
 	$diseaseID = $_POST['diseaseID'];
 
-	$result = getDoctorsAdviceSettingByDisease($username, $diseaseID);
+	$result = getDoctorsAdviceSettingByDisease($doctorID, $diseaseID);
 	
 	$data = array();
 	while ($row=mysql_fetch_array($result)){
@@ -114,7 +115,7 @@ elseif ($query_no == 7){
 	$result = mysql_query("SELECT ds.`category` 
 				FROM `doctor` d
 				JOIN  doctorsettings ds ON d.doctorID = ds.doctorID
-				WHERE d.`doctorCode` = '$username'");
+				WHERE d.`doctorCode` = '$doctorID'");
 	
 	$rec = mysql_fetch_assoc($result);
 	$type = $rec['category'];
@@ -139,7 +140,7 @@ elseif ($query_no == 7){
 	$result = mysql_query("SELECT ds.`category` 
 				FROM `doctor` d
 				JOIN  doctorsettings ds ON d.doctorID = ds.doctorID
-				WHERE d.`doctorCode` = '$username'");
+				WHERE d.`doctorCode` = '$doctorID'");
 	
 	$rec = mysql_fetch_assoc($result);
 	$type = $rec['category'];

@@ -9,6 +9,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username = $_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $appointmentNO = $_SESSION['appointmentID'];
 $patientCode = $_SESSION['patientCode'];
 $date=date("Y-m-d");
@@ -30,7 +31,7 @@ if($query_no== 0){
 			JOIN doctor doc ON ms.doctorID = doc.doctorID
 			JOIN  doctorsettings ds ON ds.doctorID = doc.doctorID
 			JOIN menu m ON ms.menuID = m.menuID
-			WHERE doc.doctorCode = '$username'
+			WHERE doc.doctorID = $doctorID
 			ORDER BY ms.order ASC";
 	$result=mysql_query($sql);
 	

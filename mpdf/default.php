@@ -180,7 +180,7 @@ function Footer() {
 
 function showDocInfo($username, $yAxis, $size){
 
-	$resultData = getDoctorInfo($username);
+	$resultData = getDoctorInfo($doctorId);
 	
 	
 

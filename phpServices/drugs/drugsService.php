@@ -16,6 +16,7 @@ if (isset($_SESSION['patientCode'])) {
 	$patientCode = $_SESSION['patientCode'];
 }
 $username = $_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 
 
 $date=date("Y-m-d");
@@ -60,8 +61,7 @@ if($query_no== 1){
 			SELECT dat.id AS drugAdviceID, dat.bangla, dat.english, dat.pdf
 			FROM `drugAdviceType` dat
 			LEFT JOIN doctorsettings ds ON dat.doctorType = ds.category
-			JOIN doctor d ON d.doctorID = ds.doctorID
-			WHERE d.doctorCode = '$username' ";
+			WHERE ds.doctorID = $doctorId ";
 	$result=mysql_query($sql);
 	
 	$data = array();
@@ -192,8 +192,7 @@ else if($query_no==4){
 	
 	$sql = mysql_query("SELECT `doctorDrugID`, d.`doctorID`, `drugID`, `drugTimeID`, `drugDoseUnit`, `drugWhenID`, `drugAdviceID` 
 				FROM `doctor_drug` dd
-				JOIN doctor d ON dd.doctorID = d.doctorID
-				WHERE d.doctorCode = '$username' AND dd.drugID = $drugID");
+				WHERE dd.doctorID = $doctorID AND dd.drugID = $drugID");
 	
 	$result = mysql_fetch_assoc($sql);
 	if($result && $result['doctorDrugID'] != null){
@@ -218,7 +217,7 @@ else if($query_no==4){
 	$drugWhen = $_POST['drugWhen'];
 	$drugAdvice = $_POST['drugAdvice'];
 	
-	$doctorData = getDoctorInfoByDoctorCode($username);
+	$doctorData = getDoctorInfoByDoctorCode($doctorID);
 	$doctorID = $doctorData['doctorID'];
 
 	mysql_query("DELETE FROM `doctor_drug_dose` WHERE `doctorDrugID`IN (SELECT `doctorDrugID` FROM `doctor_drug` WHERE WHERE `doctorID` = $doctorID AND `drugID` = $drugID)");

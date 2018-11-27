@@ -30,6 +30,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
             $scope.userAccessInfo = result;
+            $rootScope.userAccessInfo = $scope.userAccessInfo;
         }, function(error){
             $location.path("/login");
         });

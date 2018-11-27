@@ -12,7 +12,7 @@ app.controller('HeaderController', function($scope, $rootScope, $location, $time
     		$scope.displayPresCription = false;
     	}*/
     	
-        var dataString = "query=0";
+       /* var dataString = "query=0";
 
         $http({
             method: 'POST',
@@ -22,6 +22,21 @@ app.controller('HeaderController', function($scope, $rootScope, $location, $time
         }).success(function (result) {
         	$scope.doctorData = result;
         	$rootScope.doctorData = $scope.doctorData;
+            $rootScope.doctorData = $scope.userAccessInfo;
+        });*/
+
+        var dataString = "query=2";
+
+        $http({
+            method: 'POST',
+            url: "phpServices/admin/adminModuleService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.userAccessInfo = result;
+            $rootScope.userAccessInfo = $scope.userAccessInfo;
+        }, function(error){
+            $location.path("/login");
         });
     };
 	

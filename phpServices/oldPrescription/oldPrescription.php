@@ -8,6 +8,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 $username = $_SESSION['username'];
+$doctorID = $_SESSION['doctorID'];
 $query_no=  $_POST['query'];
 $appointmentID = $_SESSION['appointmentID'];
 
@@ -15,7 +16,7 @@ if($query_no== 0){
 	
 	
 	$patientID=  $_POST['patientID'];
-	$result = getPatientOldPrecription($appointmentID, $patientID, $username);
+	$result = getPatientOldPrecription($appointmentID, $patientID, $doctorID);
 	
 	$data = array();
 	while ($row=mysql_fetch_array($result)){
