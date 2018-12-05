@@ -4,25 +4,25 @@
 </div>--->
 <hr>
 <div class="row">
-    <div class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="addNewAppointment()">
+    <div  data-ng-if="hasAccess('CREATE_NEW_APP')" class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="addNewAppointment()">
         <div class="item-box">
             <i class="fa fa-user-plus fa-3x"></i>
             <label>New Patient</label>
         </div>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="followUpSearch = !followUpSearch">
+    <div data-ng-if="hasAccess('CREATE_FOLLOW_APP')" class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="changePage(2)">
         <div class="item-box">
             <i class="fa fa-user fa-3x"></i>
             <label>Follow up Patient</label>
         </div>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="changePage(3)">
+    <div data-ng-if="hasAccessMenu('8')" class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="changePage(3)">
         <div class="item-box">
             <i class="fa fa-user-md fa-3x"></i>
             <label>Research</label>
         </div>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="changePage(4)">
+    <div data-ng-if="hasAccessMenu('2')" class="col-sm-3 col-md-3 col-lg-3 link" data-ng-click="changePage(4)">
         <div class="item-box">
             <i class="fa fa-cogs fa-3x"></i>
             <label>Setting</label>
@@ -31,7 +31,6 @@
 	
 	
 </div>
-
 <section  data-ng-show="followUpSearch" class=" contacts row alert alert-info" id="generalInfoContact">
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 			 <div class="panel panel-default">
@@ -71,30 +70,30 @@
 	</section>
 
 <hr>
-<div class="panel col-md-12 appointment">
+<div class="panel col-md-12 appointment" data-ng-if="hasAccessMenu('16')">
     <div class="col-md-8 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px">
         <div  style="padding-top: 25px;">
             <div class="col-xs-12  col-lg-14" >
                 <div class="panelHead">
-                    <div class="alert alert-info col-lg-12">
-									<span class="col-lg-3">Today's Patients List</span>
-									<span class="col-lg-7">
-										<input type="text" maxlength="240" id="searcheString" class="form-control  required" placeholder="Search Patient" ng-keydown="searchAppointment()" />
-									</span>
-									<span class="pull-right col-lg-2">Total:{{numberOfAppointment}}</span>
-								</div>
+                    <div class="alert alert-info col-lg-12" data-ng-if="hasAccess('SEARCH_APPOINTMENT')">
+                        <span class="col-lg-3">Today's Patients List</span>
+                        <span class="col-lg-7">
+                            <input type="text" maxlength="240" id="searcheString" class="form-control  required" placeholder="Search Patient" ng-keydown="searchAppointment()" />
+                        </span>
+                        <span class="pull-right col-lg-2">Total:{{numberOfAppointment}}</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div>
-            <div class="col-xs-12 col-lg-12" style="height: 422px; overflow-y: auto;" >
+            <div class="col-xs-12 col-lg-12" style="height: 422px; overflow-y: auto;"  >
                 <div class="panelChild">
                     <div class="" data-ng-repeat="appointmentData in appointmentList" >
                         <div class="panelChild-body form-group" data-ng-show="appointmentData.status == 0"  >
                             <span class="textSpc" data-ng-click="letsPrescribe(appointmentData)" >{{$index + 1}} | {{appointmentData.name}} | {{appointmentData.age}} yrs  | {{appointmentData.address}} | {{appointmentData.time}} - {{appointmentData.appointmentTypeName}}</span>
 
-                            <button class="btn btn-danger pull-right"
+                            <button class="btn btn-danger pull-right" data-ng-if="hasAccess('DELETE_APPOINTMENT')"
 										ktr-confirmation="removeFromAppointment(appointmentData.appointmentID)" 
 										confirmation-message="Are you sure to remove?"
 										confirmation-title="Confirmation">
@@ -121,11 +120,61 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px; height: 560px;">
+    <div class="col-md-4 panel panel-primary mainPanelColor panel1" style="padding-top: 12px;padding-bottom: 12px; height: 560px;" data-ng-if="hasAccessMenu('18')" >
         <div>
             <div class="col-xs-12 col-lg-12" >
-                <img alt="products" src="images/product.jpg" style="height: 525px; width: 100%">
+                <div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+                <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+                <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+                <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        window.onload = function() {
+
+            var options = {
+                title: {
+                    text: "Daily Patient History"
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 45,
+                    showInLegend: "true",
+                    legendText: "{label}",
+                    indexLabel: "{label} ({y})",
+                    yValueFormatString:"#,##0.#"%"",
+                    dataPoints: [
+                        { label: "Old Patient", y: 36 },
+                        { label: "New Patient", y: 31 },
+                        { label: "Report", y: 7 },
+                        { label: "Free", y: 6 },
+                        { label: "Others", y: 3 }
+                    ]
+                }]
+            };
+            $("#chartContainer1").CanvasJSChart(options);
+
+            //Better to construct options first and then pass it as a parameter
+            var options1 = {
+                title: {
+                    text: "By gender"
+                },
+                data: [
+                    {
+                        // Change type to "doughnut", "line", "splineArea", etc.
+                        type: "column",
+                        dataPoints: [
+                            { label: "Male",  y: 10  },
+                            { label: "Female", y: 15  }
+                        ]
+                    }
+                ]
+            };
+
+            $("#chartContainer2").CanvasJSChart(options1);
+
+        }
+    </script>
 						

@@ -12,7 +12,9 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
 
  	$scope.changePage = function (page) {
 
- 	    if(page == 3){
+        if(page == 2){
+            $scope.followUpSearch = !$scope.followUpSearch;
+        }else if(page == 3){
             $location.path("/researchHome");
         }else if(page == 4){
             $location.path("/settingSelection");
@@ -20,7 +22,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
     };
  	
     $scope.bringDoctorInfo = function (){
-    	
+
         var dataString = "query=2";
 
         $http({
@@ -49,7 +51,24 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         	$location.path("/login");
         });
     };
-	
+
+    $scope.hasAccess = function(accessKey){
+        if($scope.userAccessInfo){
+            if($scope.userAccessInfo.userType == 'DOCTOR'){return true;}
+            var temp = $filter('filter')($scope.userAccessInfo.accessList, {accessCode: accessKey}, true)[0];
+            return temp == null ? false : true;
+        }
+
+    };
+
+    $scope.hasAccessMenu = function(main){
+        if($scope.userAccessInfo){
+            if($scope.userAccessInfo.userType == 'DOCTOR'){return true;}
+            var temp = $filter('filter')($scope.userAccessInfo.accessList, {parentAccessID: main}, true)[0];
+            return temp == null ? false : true;
+        }
+    };
+
 	 $scope.searchAppointment = function (){
         var $rows = $('.panelChild>.ng-scope');
         var val = $.trim($('#searcheString').val()).replace(/ +/g, ' ').toLowerCase();
@@ -58,7 +77,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
             return !~text.indexOf(val);
         }).hide();
     };
-    
+
     $scope.bringAppointment = function (){
     	
     	$scope.followUpSearch = false;

@@ -8,23 +8,6 @@ app.controller('HeaderController', function($scope, $rootScope, $location, $time
     	
     	var page = $location.path();
     	
-    	/*if(page == "/appointment" || page == "/prescription"){
-    		$scope.displayPresCription = false;
-    	}*/
-    	
-       /* var dataString = "query=0";
-
-        $http({
-            method: 'POST',
-            url: "phpServices/appointment/appointmentHelper.php",
-            data: dataString,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function (result) {
-        	$scope.doctorData = result;
-        	$rootScope.doctorData = $scope.doctorData;
-            $rootScope.doctorData = $scope.userAccessInfo;
-        });*/
-
         var dataString = "query=2";
 
         $http({
@@ -38,6 +21,15 @@ app.controller('HeaderController', function($scope, $rootScope, $location, $time
         }, function(error){
             $location.path("/login");
         });
+    };
+
+    $scope.searchAppointment = function (){
+        var $rows = $('.panelChild>.ng-scope');
+        var val = $.trim($('#searcheString').val()).replace(/ +/g, ' ').toLowerCase();
+        $rows.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
     };
 	
 	 $scope.logout = function () {

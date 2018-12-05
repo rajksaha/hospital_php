@@ -38,6 +38,7 @@ if($query_no== 0){
     $rec=mysql_fetch_assoc($sql);
     $temp = $rec['fullName'];
     $userProfile->fullName = $temp;
+    $userProfile->userType = $userType;
     if($userType != 'DOCTOR'){
         $sql = mysql_query("SELECT aa.`accessID`, aa.`accessCode`, aa.`accessDesc`, aa.`accessType`, aa.`parentAccessID`, ua.`userAccessId` 
             FROM `app_access` aa 

@@ -33,7 +33,7 @@
     </select>
 </div>
 <!---->
-<div id="source-button" data-ng-show="hoverState">
+<div data-ng-if="hasAccess('EDIT_PATIENT_INFO')" id="source-button" data-ng-show="hoverState">
     <a href="javascript:;" class="btn btn-circular btn-default" data-ng-click="editPatientInfo()"><i class="fa fa-pencil"></i></a>
 </div>
 

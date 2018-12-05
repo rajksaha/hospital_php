@@ -210,8 +210,22 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
     };
 	
     $scope.bringDoctorInfo = function (){
-    	
-        var dataString = "query=0";
+
+        var dataString = "query=2";
+
+        $http({
+            method: 'POST',
+            url: "phpServices/admin/adminModuleService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.userAccessInfo = result;
+            $rootScope.userAccessInfo = $scope.userAccessInfo;
+        }, function(error){
+            $location.path("/login");
+        });
+
+        dataString = "query=0";
 
         $http({
             method: 'POST',
@@ -250,6 +264,24 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
         	
         });
     };
+
+    $scope.hasAccess = function(accessKey){
+        if($scope.userAccessInfo){
+            if($scope.userAccessInfo.userType == 'DOCTOR'){return true;}
+            var temp = $filter('filter')($scope.userAccessInfo.accessList, {accessCode: accessKey}, true)[0];
+            return temp == null ? false : true;
+        }
+
+    };
+
+    $scope.hasAccessMenu = function(main){
+        if($scope.userAccessInfo){
+            if($scope.userAccessInfo.userType == 'DOCTOR'){return true;}
+            var temp = $filter('filter')($scope.userAccessInfo.accessList, {parentAccessID: main}, true)[0];
+            return temp == null ? false : true;
+        }
+    };
+
     
     $scope.changePatientType = function(patientType){
     	

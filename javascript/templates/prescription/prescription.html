@@ -1,77 +1,76 @@
 <div class="generic-container" >
     <div class="panel-reg">
-        <div class="panel-body">
+        <div class="panel-body" >
             <div class="row">
                 <div class="well well-sm" style="min-height: 40px" class="link" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
                     <div ng-include="'javascript/templates/prescription/patientInfo.html'"></div>
                 </div>
             </div>
             <ul class="nav nav-pills pull-right" style="padding-top: 10px">
-                <li>
+                <li data-ng-if="hasAccess('HISTORY')">
                     <a href="javascript:;" class="btn btn-inverted btn-bold btn-primary" data-ng-click="menuPopUp('history')">History </a>
                 </li>
-                <li>
+                <li data-ng-if="hasAccess('OLD_PRESCRIPTION')">
                     <a class="btn btn-inverted btn-bold btn-primary" href="#/oldPrescription">Old Prescription </a>
                 </li>
-                <li>
+                <li data-ng-if="hasAccess('FOLLOW_UP_CHART')">
                     <a class="btn btn-inverted btn-bold btn-primary" href="#/followUpChart">Follow-up chart </a>
                 </li>
                 <li >
                     <a class="btn btn-inverted btn-bold btn-primary" href="#/appointment"> Appointment</i></a>
                 </li>
-                <li>
+                <li data-ng-if="hasAccess('PRINT')">
                     <a class="btn btn-inverted btn-bold btn-primary" href="javascript:;" data-ng-click="print()">Print</a>
                 </li>
             </ul>
             <div class="bs-divider">Prescription</div>
-                <div class="row well well-lg">
-                    <div class="col-sm-2 col-md-2 col-lg-2">
+                <div class="row well well-lg" style="height: 100vh;">
+                    <div class="col-sm-2 col-md-2 col-lg-2" data-ng-if="hasAccess('PATIENT_PHOTO')">
                         <div class="image-upload" >
                             <label for="picture">
                                 <img alt="patImg" data-ng-if="patientData.patientImage != null" src="{{patientData.patientImage}}" height="120px" width="120px">
                                 <img alt="patImg" data-ng-if="patientData.patientImage == null" src="images/no-photo.gif" height="120px" width="120px">
                             </label>
                             <input type="file" id="picture" class="form-control" name="picture"  data-ng-file-select="onFileSelect($files)" data-ng-click="resetInputFile()"/>
-                        </div>                       
-					    <h2 class="item-head"><label>Referred Doctor :</label></h2>
-                        <div class="input-group input-group-sm" data-ng-if="!refferedDoctorData.id">
-                            <input type="text" data-ng-model="refferedAdderData.doctorName" typeahead="refDoc.doctorName for refDoc in getRefDoctor($viewValue)"  class="form-control" placeholder="Search Doctor" typeahead-on-select='onSelectRefDocotor($item, $model, $label)' />
-                            <input type="text" data-ng-model="refferedAdderData.doctorAdress" class="form-control" placeholder="Doctor Address"/>
-                            <button class="btn btnLanier btn-success" title="Save" data-ng-show="refferedAdderData.doctorAdress && refferedAdderData.doctorName" data-ng-click="saveReffredDoctor(refferedAdderData)">
-                                <span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                            </button>
+                        </div>
+                        <div data-ng-if="hasAccess('REF_DOCTOR')">
+                            <h2 class="item-head"  ><label>Referred Doctor :</label></h2>
+                            <div  class="input-group input-group-sm" data-ng-if="!refferedDoctorData.id">
+                                <input type="text" data-ng-model="refferedAdderData.doctorName" typeahead="refDoc.doctorName for refDoc in getRefDoctor($viewValue)"  class="form-control" placeholder="Search Doctor" typeahead-on-select='onSelectRefDocotor($item, $model, $label)' />
+                                <input type="text" data-ng-model="refferedAdderData.doctorAdress" class="form-control" placeholder="Doctor Address"/>
+                                <button class="btn btnLanier btn-success" title="Save" data-ng-show="refferedAdderData.doctorAdress && refferedAdderData.doctorName" data-ng-click="saveReffredDoctor(refferedAdderData)">
+                                    <span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+                            <div class="input-group input-group-sm" data-ng-if="refferedDoctorData.id">
+                                <span data-ng-click="deleteReffredDoctor(refferedDoctorData.id)" class="glyphicons glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                <span>{{refferedDoctorData.doctorName}} - {{refferedDoctorData.doctorAdress}}</span>
+                            </div>
                         </div>
 
-                        <div class="input-group input-group-sm" data-ng-if="refferedDoctorData.id">
-                            <span data-ng-click="deleteReffredDoctor(refferedDoctorData.id)" class="glyphicons glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            <span>{{refferedDoctorData.doctorName}} - {{refferedDoctorData.doctorAdress}}</span>
-                        </div>
-					   
-                        <!--<div data-ng-repeat="patientState in patientStateList" >
-                            <div class="checkbox-s">
-                                <input id="c1-{{patientState.id}}" type="checkbox" name="c1[]" data-ng-model="appoinmentData.appointmentType" data-ng-checked="appoinmentData.appointmentType == patientState.id" data-ng-change="changePatientState(patientState)">
-                                <label for="c1-{{patientState.id}}">{{patientState.name}}</label>
-                            </div>
-                            &lt;!&ndash;<input type="checkbox" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)"> {{patientType.typeName}}&ndash;&gt;
-                        </div>-->
-                        <h2 class="item-head"><a href="javascript:"><label class="mainLabel">Patient Type </label></a></h2>
+					   <div data-ng-if="hasAccess('VISIT_TYPE')">
+                           <h2 class="item-head"><a href="javascript:"><label class="mainLabel">Visit Type</label></a></h2>
+                           <div data-ng-repeat="patientState in patientStateList">
+                               <div class="radio-s">
+                                   <input id="r1-{{patientState.id}}" type="radio" name="r1_1"  data-ng-model="appoinmentData.appointmentType" data-ng-checked="appoinmentData.appointmentType == patientState.id" data-ng-change="changePatientState(patientState)">
+                                   <label for="r1-{{patientState.id}}">{{patientState.name}}</label>
+                               </div>
+                           </div>
+                       </div>
 
-                        <div data-ng-repeat="patientType in patientTypeList" >
-                            <div class="checkbox-s">
-                                <input id="c2-{{patientType.id}}" type="checkbox" name="c2[]" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)">
-                                <label for="c2-{{patientType.id}}">{{patientType.typeName}}</label>
-                            </div>
-                            <!--<input type="checkbox" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)"> {{patientType.typeName}}-->
-                        </div>
-                        
-						
-						 <h2 class="item-head"><a href="javascript:"><label class="mainLabel">Visit Type</label></a></h2>
-                        <div data-ng-repeat="patientState in patientStateList">
-                            <div class="radio-s">
-                                <input id="r1-{{patientState.id}}" type="radio" name="r1_1"  data-ng-model="appoinmentData.appointmentType" data-ng-checked="appoinmentData.appointmentType == patientState.id" data-ng-change="changePatientState(patientState)">
-                                <label for="r1-{{patientState.id}}">{{patientState.name}}</label>
+                        <div data-ng-if="hasAccess('VISIT_TYPE')">
+                            <h2 class="item-head"><a href="javascript:"><label class="mainLabel">Patient Type </label></a></h2>
+
+                            <div data-ng-repeat="patientType in patientTypeList" >
+                                <div class="checkbox-s">
+                                    <input id="c2-{{patientType.id}}" type="checkbox" name="c2[]" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)">
+                                    <label for="c2-{{patientType.id}}">{{patientType.typeName}}</label>
+                                </div>
+                                <!--<input type="checkbox" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)"> {{patientType.typeName}}-->
                             </div>
                         </div>
+
 						
                     </div>
                     <div class="col-sm-10 col-md-10 col-lg-10 verticalLine">
@@ -79,15 +78,15 @@
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                 <div ng-include="'javascript/templates/prescription/complainAndVital.html'"></div>
                                 <div ng-include="'javascript/templates/prescription/history.html'"></div>
-                                <div ng-include="'javascript/templates/prescription/invSection.html'"></div>
-                                <div ng-include="'javascript/templates/prescription/refDoctor.html'"></div>
+                                <div data-ng-if="hasAccess('INVESTIGATION')" ng-include="'javascript/templates/prescription/invSection.html'"></div>
+                                <div data-ng-if="hasAccess('REF_DOCTOR')" ng-include="'javascript/templates/prescription/refDoctor.html'"></div>
                             </div>
                             <div class="verticalLine col-sm-6 col-md-6 col-lg-6">
-                                <div class="well well-sm" style="border-left: 5px solid #3ac0ff;">
+                                <div data-ng-if="hasAccess('DIAGNOSIS')" class="well well-sm" style="border-left: 5px solid #3ac0ff;">
                                     <a href="javascript:" data-ng-click="performDiganosis(diagnosisData)" ><label class="mainLabel">Diagnosis : </label></a><span > {{diagnosisData.diseaseName}}</span>
                                 </div>
-                                <div ng-include="'javascript/templates/prescription/drugInfo.html'"></div>
-                                <div ng-include="'javascript/templates/prescription/advice.html'"></div>
+                                <div data-ng-if="hasAccess('PRES_DRUGS')" ng-include="'javascript/templates/prescription/drugInfo.html'"></div>
+                                <div data-ng-if="hasAccess('PRES_ADVICE')" ng-include="'javascript/templates/prescription/advice.html'"></div>
                             </div>
                         </div>
                     </div>
