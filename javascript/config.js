@@ -81,7 +81,7 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                 return $ocLazyLoad.load(
                     {
                         name: 'doctorPlatform',
-                        files: ['javascript/controllers/appointment/appoinment.js' ]
+                        files: ['javascript/directives/jquery.canvasjs.min.js', 'javascript/controllers/appointment/appoinment.js' ]
                     });
             }]
         }

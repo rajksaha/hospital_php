@@ -27,10 +27,14 @@ app.service('JsonService', function(){
 						{"code" : "6", "name" :'4 hourly'},
 						{"code" : "8", "name" :'3 hourly'},
 						{"code" : "12", "name" :'2hourly'},
-						{"code" : "-1", "name" :'Preiodic Dose'},
+						{"code" : "-1", "name" :'Periodic' +
+                        ' Dose'},
 						{"code" : "-2", "name" :'Same As'},
-						{"code" : "-3", "name" :'Empty Dose'}
+						{"code" : "-3", "name" :'Empty Dose'},
+						{"code" : "-4", "name" :'Once in a Week'},
+						{"code" : "-5", "name" :'Once in a Month'},
+						{"code" : "-6", "name" :'Once in a Year'}
 		              ];
-	
-    
+
+
 });

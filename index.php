@@ -116,6 +116,8 @@
 
 	<!-- Input Validator -->
 	<script type="text/javascript" src="javascript/inputValidator/inputValidator.0.1.js"></script>
+    <script src="javascript/controllers/angular-sortable.js"></script>
+
 
 
 </body>

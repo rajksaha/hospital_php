@@ -21,7 +21,7 @@ function Footer() {
 }
 
 
-function ShowPatInfo($patientCode,$yAxis, $appointmentID){
+function ShowPatInfo($patientCode,$yAxis, $appointmentID, $appData){
 
         $resultData = getPatientInformaition($patientCode);
 
@@ -60,7 +60,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
 
         $phone = $rec['phone'];
 
-        $date = date('D d M Y');
+        $date = $appData['date'];
 
         $this->SetXY(100,$yAxis + 11);
         $this->MultiCell(65,5, "ID No: $patientCode");
@@ -553,6 +553,12 @@ function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
                 }else if($drugTime == 2){
                     list($num,$type) = explode('+', $drugDose, 2);
                     $drugDose =  "$num + 0 + $type";
+                }else if($drugTime == -4){
+                    $drugDose =  "সপ্তাহে ১ বার";
+                }else if($drugTime == -5){
+                    $drugDose =  "মাসে ১ বার";
+                }else if($drugTime == -6){
+                    $drugDose =  "বছরে ১ বার";
                 }
 
 
@@ -592,10 +598,10 @@ function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
                         $text = "($drugDose) $drugDoseInitial";
                     }
 
-                    if($index == 0){
-                        $periodText = 'প্রথম'. " $drugNoDay $drugNoDayType $text";
+                    if($index = 0){
+                        $periodText = " $drugNoDay $drugNoDayType $text";
                     }else{
-                        $periodText = "$periodText". " তারপর " . " $text $drugNoDay $drugNoDayType";
+                        $periodText = "$periodText". "\n" . " $text $drugNoDay $drugNoDayType";
                     }
                     $index++;
 
@@ -674,7 +680,7 @@ $pageNum = 1;
 $pdf->page = $pageNum;
 
 if($appType != 4){
-    $patientImage = $pdf->ShowPatInfo($patientCode, 45, $username);
+    $patientImage = $pdf->ShowPatInfo($patientCode, 45, $username, $appData);
     if($patientImage != null){
         $pdf->displayImage($username, $patientImage,$leftXaxis,$leftYaxis,$photoSize);
         $gap = $gap + $photoSize;

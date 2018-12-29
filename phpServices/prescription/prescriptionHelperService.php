@@ -156,7 +156,7 @@ elseif ($query_no == 11){
 	
 }elseif ($query_no == 13){
 	
-	$doctorID  =$_POST['doctorID'];
+	//$doctorID  =$_POST['doctorID'];
 	$diseaseID  =$_POST['diseaseID'];
 	
 	$added = 0;
@@ -185,7 +185,7 @@ elseif ($query_no == 11){
 
 elseif ($query_no == 14){
 
-	$doctorID  =$_POST['doctorID'];
+	//$doctorID  =$_POST['doctorID'];
 	$diseaseID  =$_POST['diseaseID'];
 	addToDoctorSetting($appointmentNO, $doctorID, $diseaseID);
 }
@@ -253,7 +253,7 @@ elseif ($query_no == 15){
 	
 }elseif ($query_no == 20){
 	
-	$doctorID = $_POST['doctorID'];
+	//$doctorID = $_POST['doctorID'];
 	
 	$result = getContentDetail($doctorID, "DOCTORPDF");
 	

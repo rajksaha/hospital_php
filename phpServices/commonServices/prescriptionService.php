@@ -24,7 +24,7 @@ function getPresCribedDrugs($appointmentID){
 				JOIN drug d ON dp.drugID = d.drugID
 				JOIN drugwhentype dwt ON dp.drugWhenID = dwt.id
 				JOIN drugadvicetype dat ON dp.drugAdviceID = dat.id
-			WHERE dp.appointMentID = '$appointmentID' ORDER BY dp.id" ;
+			WHERE dp.appointMentID = '$appointmentID' ORDER BY dp.presNum" ;
 	
 	$result=mysql_query($sql);
 	
@@ -206,12 +206,13 @@ function getPrescribedReffredDoctor($appointmentID){
 
 }
 
-function getPatientOldPrecription($appointmentID, $patientID, $doctorCode){
+function getPatientOldPrecription($appointmentID, $patientID, $doctorID){
 	$sql = "SELECT app.`appointmentID`, app.`doctorCode`, app.`patientCode`, app.`date`, app.`time`, app.`status`, app.`appointmentType`, app.`addedBy`, p.patientID, p.name, at.name AS appointmentTypeName, at.shortName AS appointmentTypeShortName
 			FROM `appointment` app
+			JOIN `doctor` d ON d.doctorCode = app.doctorCode
 			JOIN patient p ON app.patientCode = p.patientCode
 			JOIN appointment_type at ON at.id = app.appointmentType
-			WHERE p.patientID = '$patientID' AND app.doctorCode = '$doctorCode' AND app.appointmentID <> '$appointmentID'
+			WHERE p.patientID = '$patientID' AND d.doctorID  = $doctorID AND app.appointmentID <> '$appointmentID'
 			ORDER BY app.date DESC";
 	
 	$result=mysql_query($sql);

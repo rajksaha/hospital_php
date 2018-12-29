@@ -20,6 +20,8 @@ app.controller('PrescriptionController.PrescribeDrugsController', function($scop
     };
 
 
+
+
     $scope.bringPresCribedDrugs = function (){
 
         if(record.drugData.id){
@@ -348,7 +350,7 @@ app.controller('PrescriptionController.PrescribeDrugsController', function($scop
         if($scope.drugData.drugStr == undefined){
             $scope.drugData.drugStr = '';
         }
-        var dataString = 'drugType='+ drugType +'&drugName='+ drugName +'&drugStr='+ $scope.drugData.drugStr + '&drugTime='+ drugTime +'&doseUnit='+ doseUnit + '&drugWhen='+ drugWhen +'&drugAdvice='+ drugAdvice+ '&drugPrescribeID='+ drugPrescribeID +'&query=' + query;
+        var dataString = 'drugType='+ drugType +'&drugName='+ drugName +'&drugStr='+ $scope.drugData.drugStr + '&drugTime='+ drugTime +'&doseUnit='+ doseUnit + '&drugWhen='+ drugWhen +'&drugAdvice='+ drugAdvice+ '&drugPrescribeID='+ drugPrescribeID +'&query=' + query + '&presNum=' + record.drugData.presNum;
 
         $http({
             method: 'POST',
@@ -387,8 +389,7 @@ app.controller('PrescriptionController.PrescribeDrugsController', function($scop
                     data: dataString,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (result) {
-
-
+                    console.log(result);
                 });
 
             });

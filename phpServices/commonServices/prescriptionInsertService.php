@@ -5,7 +5,7 @@ if (!isset($_SESSION['username'])) {
 	header('Location: index.php');
 }
 
-function insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice){
+function insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice, $presNum){
 	
 	
 	$sql = "INSERT 
@@ -17,7 +17,8 @@ function insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, 
 						`drugTimeID`, 
 						`drugDoseUnit`, 
 						`drugWhenID`, 
-						`drugAdviceID`
+						`drugAdviceID`,
+						`presNum`
 					)
 	 			VALUES 
 					(
@@ -27,7 +28,8 @@ function insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, 
 						'$drugTime',
 						'$doseUnit',
 						'$drugWhen',
-						'$drugAdvice'
+						'$drugAdvice',
+						$presNum
 					)";
 	
 	mysql_query($sql);

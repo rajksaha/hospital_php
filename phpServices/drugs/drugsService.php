@@ -54,6 +54,7 @@ if($query_no== 1){
 	
 	echo json_encode($data);
 }else if($query_no==3){
+
 	$sql = "SELECT dat.id AS drugAdviceID, dat.bangla, dat.english, dat.pdf
 			FROM `drugAdviceType` dat
 			WHERE dat.doctorType =0
@@ -61,7 +62,7 @@ if($query_no== 1){
 			SELECT dat.id AS drugAdviceID, dat.bangla, dat.english, dat.pdf
 			FROM `drugAdviceType` dat
 			LEFT JOIN doctorsettings ds ON dat.doctorType = ds.category
-			WHERE ds.doctorID = $doctorId ";
+			WHERE ds.doctorID = $doctorID ";
 	$result=mysql_query($sql);
 	
 	$data = array();
@@ -104,8 +105,9 @@ if($query_no== 1){
 	$doseUnit = $_POST['doseUnit'];
 	$drugWhen = $_POST['drugWhen'];
 	$drugAdvice = $_POST['drugAdvice'];
+	$presNum = $_POST['presNum'];
 	
-	$result = insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice);
+	$result = insertPrescriptionDrugs($appointmentID, $drugType, $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice, $presNum);
 	
 	echo $result;
 	
@@ -217,13 +219,11 @@ else if($query_no==4){
 	$drugWhen = $_POST['drugWhen'];
 	$drugAdvice = $_POST['drugAdvice'];
 	
-	$doctorData = getDoctorInfoByDoctorCode($doctorID);
-	$doctorID = $doctorData['doctorID'];
 
 	mysql_query("DELETE FROM `doctor_drug_dose` WHERE `doctorDrugID`IN (SELECT `doctorDrugID` FROM `doctor_drug` WHERE WHERE `doctorID` = $doctorID AND `drugID` = $drugID)");
 	mysql_query("DELETE FROM `doctor_drug` WHERE `doctorID` = $doctorID AND `drugID` = $drugID");
 	
-	$result = insertDoctorDrug($doctorData['doctorID'], $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice);
+	$result = insertDoctorDrug($doctorID, $drugID, $drugTime, $doseUnit, $drugWhen, $drugAdvice);
 	
 	echo $result;
 	

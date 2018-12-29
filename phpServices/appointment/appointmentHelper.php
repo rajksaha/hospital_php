@@ -113,9 +113,13 @@ if($query_no==2){
 	$sex= $_POST['sex'];
 	$phone = $_POST['phone'];
 	$referredBy = $_POST['referredBy'];
+    $hospitalName = $_POST['hospitalName'];
+    $bedNum = $_POST['bedNum'];
+    $wardNum = $_POST['wardNum'];
+    $headOfUnit = $_POST['headOfUnit'];
 
 	$appointmentType =  0;
-	$sql="INSERT INTO `patient`( `patientCode`, `name`, `age`, `sex`, `occupation`, `address`, `phone`,`referredBy`) VALUES ( '$patientCode', '$name', '$age' , '$sex','$occupation', '$address', '$phone', '$referredBy')";
+	$sql="INSERT INTO `patient`( `patientCode`, `name`, `age`, `sex`, `occupation`, `address`, `phone`,`referredBy`, `hospitalName`, `bedNum`, `wardNum`, `headOfUnit`) VALUES ( '$patientCode', '$name', '$age' , '$sex','$occupation', '$address', '$phone', '$referredBy', '$hospitalName', '$bedNum', '$wardNum', '$headOfUnit')";
 
 	mysql_query($sql);
 

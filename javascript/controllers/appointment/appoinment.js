@@ -33,6 +33,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         }).success(function (result) {
             $scope.userAccessInfo = result;
             $rootScope.userAccessInfo = $scope.userAccessInfo;
+            $scope.initiateDashboard();
         }, function(error){
             $location.path("/login");
         });
@@ -50,6 +51,83 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         }, function(error){
         	$location.path("/login");
         });
+    };
+
+    $scope.renderGraph = function (result, container) {
+
+        var chart = new CanvasJS.Chart(container, {
+            title: {
+                text: "Daily Patient History"
+            },
+            data: [{
+                type: "pie",
+                startAngle: 45,
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabel: "{label} ({y})",
+                dataPoints: [
+                    { label: "Old Patient", y: result.oldPatient },
+                    { label: "New Patient", y: result.newPatient },
+                    { label: "Report", y: result.freePatient },
+                    { label: "Free", y: result.relative },
+                    { label: "Others", y: result.report }
+                ]
+            }]
+        });
+        chart.render();
+    };
+
+    $scope.initiateDashboard = function () {
+
+        var dataString = "query=0";
+
+        $http({
+            method: 'POST',
+            url: "phpServices/dashboard/dashboardHelperService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            var chart = new CanvasJS.Chart("chartContainer1", {
+                title: {
+                    text: "Daily Patient History"
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 45,
+                    showInLegend: "true",
+                    legendText: "{label}",
+                    indexLabel: "{label} ({y})",
+                    dataPoints: [
+                        { label: "Old Patient", y: result.oldPatient },
+                        { label: "New Patient", y: result.newPatient },
+                        { label: "Report", y: result.report },
+                        { label: "Free", y: result.freePatient },
+                        { label: "Relative", y: result.relative }
+                    ]
+                }]
+            });
+            chart.render();
+
+            var chart2 = new CanvasJS.Chart("chartContainer2", {
+                title: {
+                    text: "By Gender"
+                },
+                data: [{
+                    type: "column",
+                    dataPoints: [
+                        { label: "Male",  y: result.male  },
+                        { label: "Female", y: result.feMale  }
+                    ]
+                }]
+            });
+            chart2.render();
+
+        }, function(error){
+            $location.path("/login");
+        });
+
+
+
     };
 
     $scope.hasAccess = function(accessKey){
@@ -121,6 +199,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         modalInstance.result.then(function(result) {
         	$scope.bringDoctorInfo();
         	$scope.bringAppointment();
+            $scope.initiateDashboard();
          });
     };
     
@@ -265,6 +344,7 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         	 $scope.patientName = "";
         	 $scope.patientPhone = "";
         	 $scope.bringAppointment();
+        	 $scope.initiateDashboard();
          });
      };
      
@@ -349,6 +429,10 @@ app.controller('AppointmentController.AddNewPatientController', function($scope,
                 '&phone='+ $scope.patientData.phone +
                 '&occupation='+ $scope.patientData.occupation +
                 '&referredBy='+ $scope.patientData.referredBy +
+                '&hospitalName='+ $scope.patientData.hospitalName +
+                '&bedNum='+ $scope.patientData.bedNum +
+                '&wardNum='+ $scope.patientData.wardNum +
+                '&headOfUnit='+ $scope.patientData.headOfUnit +
                 '&query=2';
 
 	        $http({

@@ -528,8 +528,42 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
         	$scope.prescribedDrugList = result;
+
+            angular.forEach($scope.prescribedDrugList, function(value, key) {
+                if(value.drugTimeID == -4){
+                    value.preiodicList[0].dose = "সপ্তাহে ১ বার";
+                }else if(value.drugTimeID == -5){
+                    value.preiodicList[0].dose = "মাসে ১ বার";
+                }if(value.drugTimeID == -6){
+                    value.preiodicList[0].dose = "বছরে ১ বার";
+                }
+            });
+            $scope.vm = {
+                list: $scope.prescribedDrugList
+            };
         });
 	};
+
+    $scope.vm = {
+        list: []
+    };
+
+    $scope.$watch('vm', function(newValue, oldValue) {
+        if (oldValue && oldValue.list && oldValue.list.length > 0 && newValue !== oldValue) {
+            var temp = {};
+             temp.drugList = newValue.list;
+            var dataString = 'jsonString=' + JSON.stringify(temp);
+
+            $http({
+                method: 'POST',
+                url: "phpServices/drugs/drugReorderService.php",
+                data: dataString,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (result) {
+                console.log("done" + result);
+            });
+        }
+    }, true);
 	
 	$scope.bringPrescribedInv = function (appointmentID){
 		
@@ -988,7 +1022,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 	$scope.addDrugsToPrescription = function(){
 		
 		var drugData = {};
-		
+        drugData.presNum = $scope.prescribedDrugList.length + 1;
 		var modalInstance = $modal.open({
 			templateUrl: 'javascript/templates/drugs/drugModalNew.html',
             windowClass: 'fade in',
@@ -1014,8 +1048,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 		var drugData = {};
 		
 		drugData = drugDataDB;
-		
-		
+
 		var modalInstance = $modal.open({
 			templateUrl: 'javascript/templates/drugs/drugModalNew.html',
             windowClass: 'fade in',
