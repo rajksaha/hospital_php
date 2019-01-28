@@ -113,11 +113,13 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                             'javascript/controllers/inv/inv.js',
                             'javascript/controllers/prescription/complainController.js',
                             'javascript/controllers/prescription/diagnosisController.js',
+                            'javascript/controllers/prescription/dietController.js',
                             'javascript/controllers/prescription/drugController.js',
                             'javascript/controllers/prescription/pdfSelectionController.js',
                             'javascript/controllers/prescription/prescriptionSettingController.js',
                             'javascript/controllers/prescription/vitalController.js',
                             'javascript/controllers/history/pastHistoryController.js',
+                            'javascript/controllers/patient/patientTypeController.js',
                             'javascript/controllers/advice/advice.js'
                         ]
                     });
@@ -525,6 +527,7 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                         name: 'doctorPlatform',
                         files: [
 							'javascript/controllers/researchHome/researchHomeController.js',
+                            'javascript/controllers/researchHome/followUpReportController.js',
 							'javascript/controllers/patient/patientController.js'
 						 ]
                     });

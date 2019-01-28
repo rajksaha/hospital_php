@@ -30,7 +30,7 @@ function getInvList($queryString){
 	
 	$sql = "SELECT i.`id` , i.`name`
 			FROM `inv` i
-			WHERE i.`name` LIKE '" . $queryString . "%' LIMIT 10";
+			WHERE i.`name` LIKE '" . $queryString . "%' LIMIT 10 ORDER BY `name`";
 
 	$result=mysql_query($sql);
 	$data = array();
@@ -80,5 +80,19 @@ function getAdvcieList($queryString, $type, $lang){
 	}
 	
 	echo json_encode($data);
+}
+function getDiet($queryString){
+
+    $sql = "SELECT `contentDetailID`, `detail` FROM `contentdetail` 
+            WHERE `contentType` = 'DIET' 
+            AND `detail` LIKE '" . $queryString . "%' LIMIT 10";
+
+    $result=mysql_query($sql);
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+
+    echo json_encode($data);
 }
 ?>

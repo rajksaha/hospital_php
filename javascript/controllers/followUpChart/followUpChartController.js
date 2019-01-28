@@ -326,7 +326,7 @@ app.controller('InvSelectorController', function($scope, $http, $modalInstance, 
         $scope.invData = item;
     };
 
-    $scope.save = function(){
+    $scope.save = function(addAnother){
 
         var dataString = 'query=1'+ '&invName=' + $scope.invData.name;
 
@@ -336,7 +336,11 @@ app.controller('InvSelectorController', function($scope, $http, $modalInstance, 
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-            $modalInstance.close();
+            if(addAnother){
+                $scope.invData.name = "";
+            }else{
+                $modalInstance.close();
+            }
         });
 	};
 

@@ -4,7 +4,7 @@
             <label>Clinical Note</label>
             <a  class="fa fa-floppy-o pull-right link" aria-hidden="true" data-ng-click="updateCommentText(commentText)"></a>
         </h2>
-        <span><textarea rows="3" style="width: 100%" data-ng-model="commentText">{{commentText}}</textarea></span>
+        <span><textarea rows="3" style="width: 100%" data-ng-model="commentText" typeahead="content.detail for content in getClinicalNote($viewValue)" typeahead-on-select='onSelectClinicalRecord($item, $model, $label)'>{{commentText}}</textarea></span>
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6">
    

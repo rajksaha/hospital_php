@@ -1,0 +1,20 @@
+<div class="modal-header modalHead ">
+	<h4 class="modal-title">Add Diet</h4>
+</div>
+<div class="modal-body modalBody"  style="position:relative; z-index:1;">
+	<div class="alert alert-danger alert-dismissable" data-ng-show="error">
+        <div>{{errorMessage}}</div>
+        <div id="lblMsg_modal"></div>
+    </div>
+	<div  class="row step4Width" id="validateReq">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+			<label>Diet Name:</label>
+			<input type="text" maxlength="1000" ng-model="dietData.dietName" typeahead="dietNameData.detail for dietNameData in getDiet($viewValue)"  class="form-control required" placeholder="Diet" typeahead-on-select='onSelectDiet($item, $model, $label)'/>
+		</div>
+	</div>
+	
+</div>
+<div class="modal-footer modalFoot">
+	<button class="btn btnLanier btn-success" data-ng-click="save()" ><span class="glyphicons glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save</button>
+	<button class="btn btnLanier btn-danger" data-ng-click="cancel()" ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancel</button>
+</div>

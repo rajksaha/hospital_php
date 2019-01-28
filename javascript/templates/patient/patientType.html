@@ -1,0 +1,53 @@
+<div class="modal-header modalHead ">
+    <div class="row">
+        <div class="col-md-10">
+            <h4 class="modal-title">Patient Type Management</h4>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success pull-right" data-ng-show="globalAdd">
+                <span class='fa fa-plus' aria-hidden='true' data-ng-click="add()"></span>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="modal-body modalBody"  style="position:relative; z-index:1;">
+    <div class="alert alert-danger alert-dismissable" data-ng-show="error">
+        <div>{{errorMessage}}</div>
+        <div id="lblMsg_modal"></div>
+    </div>
+
+
+    <div  class="row step4Width" id="validateReq">
+        <table class="table table-striped table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="patientType in patientTypeList">
+                <td>
+                    <label data-ng-hide="patientType.editMode" >{{patientType.typeName}}</label>
+                    <input type="text" data-ng-show="patientType.editMode" data-ng-model="patientType.typeName">
+                </td>
+                <td>
+                    <button class="btn btn-success pull-right" data-ng-show="patientType.editMode">
+                        <span class='fa fa-check' aria-hidden='true' data-ng-click="itemSave(patientType)"></span>
+                    </button>
+                    <button class="btn btn-success pull-right" data-ng-hide="patientType.editMode">
+                        <span class='fa fa-pencil' aria-hidden='true' data-ng-click="patientType.editMode = true"></span>
+                    </button>
+                    <button class="btn btn-danger pull-right" data-ng-hide="patientType.editMode" data-ng-click="deletePatientType(patientType.id, $index)">
+                        <span class='fa fa-trash' aria-hidden='true'></span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="modal-footer modalFoot">
+    <button class="btn btnLanier btn-danger" data-ng-click="cancel()" ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Cancel</button>
+</div>

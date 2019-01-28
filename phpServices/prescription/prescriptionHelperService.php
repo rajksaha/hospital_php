@@ -60,15 +60,30 @@ if($query_no==2){
 }
 else if($query_no==3){
 	$patientType = $_POST['patientType'];
-	$patientDetailID = $_POST['patientDetailID'];
+	$req = $_POST['req'];
 	$patientID = $_POST['patientID'];
-	
-	if($patientDetailID != 'undefined'){
+
+
+	if(ltrim($req) == 'UPDATE'){
 		$sql = "UPDATE `patient_detail` SET `type`='$patientType' WHERE patientID = '$patientID'";
-	}else{
-		$sql = "INSERT INTO `patient_detail`(`patientID`, `type`) VALUES ('$patientID',$patientType)";
-	}	echo $sql;
+	}else {
+        $sql = "INSERT INTO `patient_detail`(`patientID`, `type`) VALUES ('$patientID',$patientType)";
+    }
 	mysql_query($sql);
+
+
+        //delete patient follow-up, values
+    mysql_query("DELETE FROM `patient_follow_up` WHERE `patientID` = $patientID");
+    // insert new
+    $sql ="SELECT `followUpSerttingID`, `doctorID`, `patientTypeId`, `invID` FROM `doctor_followup_setteing` WHERE `doctorID` = $doctorID AND `patientTypeId` = $patientType";
+    $result=mysql_query($sql);
+    //echo $sql;
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        $invId = $row['invID'];
+        mysql_query("INSERT INTO `patient_follow_up`( `patientID`, `doctorID`, `invID`) VALUES ($patientID, $doctorID, $invId)");
+        echo $sql;
+    }
 }
 else if($query_no==4){
 	
@@ -263,8 +278,17 @@ elseif ($query_no == 15){
 		array_push($data,$row);
 	}
 	echo json_encode($data);
-	
-	
-	
+}elseif ($query_no == 21){
+
+    $queryString=$_POST['detail'];
+
+    $sql ="SELECT detail FROM `contentdetail` WHERE contentType = 'CLINICAL_RECORD' and detail LIKE '" . $queryString . "%' LIMIT 10";
+    $result=mysql_query($sql);
+    //echo $sql;
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+    echo json_encode($data);
 }
 ?>

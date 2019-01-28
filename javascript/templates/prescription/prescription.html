@@ -63,14 +63,12 @@
                        </div>
 
                         <div data-ng-if="hasAccess('VISIT_TYPE')">
-                            <h2 class="item-head"><a href="javascript:"><label class="mainLabel">Patient Type </label></a></h2>
-
+                            <h2 class="item-head"><a href="javascript:" data-ng-click="managePatientType()"><label class="mainLabel">Patient Type </label></a></h2>
                             <div data-ng-repeat="patientType in patientTypeList" >
-                                <div class="checkbox-s">
-                                    <input id="c2-{{patientType.id}}" type="checkbox" name="c2[]" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)">
-                                    <label for="c2-{{patientType.id}}">{{patientType.typeName}}</label>
+                                <div class="radio-s">
+                                    <input id="p2-{{patientType.id}}" type="radio" name="pp2_1" data-ng-model="patientType.patientTypeId" data-ng-checked="patientData.type == patientType.id" data-ng-click="changePatientType(patientType)">
+                                    <label for="p2-{{patientType.id}}">{{patientType.typeName}}</label>
                                 </div>
-                                <!--<input type="checkbox" data-ng-model="patientType.patientTypeData" data-ng-checked="patientData.type == patientType.id" data-ng-change="changePatientType(patientType)"> {{patientType.typeName}}-->
                             </div>
                         </div>
 
@@ -85,6 +83,9 @@
                                 <div data-ng-if="hasAccess('REF_DOCTOR')" ng-include="'javascript/templates/prescription/refDoctor.html'"></div>
                             </div>
                             <div class="verticalLine col-sm-6 col-md-6 col-lg-6">
+                                <div data-ng-if="hasAccess('DIET')" class="well well-sm" style="border-left: 5px solid #3ac0ff;">
+                                    <a href="javascript:" data-ng-click="performDiet(dietData)" ><label class="mainLabel">Diet : </label></a><span > {{dietData.dietName}}</span>
+                                </div>
                                 <div data-ng-if="hasAccess('DIAGNOSIS')" class="well well-sm" style="border-left: 5px solid #3ac0ff;">
                                     <a href="javascript:" data-ng-click="performDiganosis(diagnosisData)" ><label class="mainLabel">Diagnosis : </label></a><span > {{diagnosisData.diseaseName}}</span>
                                 </div>

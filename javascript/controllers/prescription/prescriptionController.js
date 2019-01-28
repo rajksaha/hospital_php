@@ -101,11 +101,22 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 	};
 	
 	$scope.refDoc = {};
+
+    $scope.getClinicalNote = function(term) {
+        var dataString = 'query=21'+ '&detail=' + term;
+        return $http({
+            method: 'POST',
+            url: "phpServices/prescription/prescriptionHelperService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function(result) {
+            $scope.content = result.data;
+            return limitToFilter($scope.content, 10);
+        });
+    };
 	
     $scope.getRefDoctor = function(term) {
-        
     	var dataString = 'query=9'+ '&refDocName=' + term;
-        
         return $http({
             method: 'POST',
             url: "phpServices/prescription/prescriptionHelperService.php",
@@ -115,9 +126,6 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
         	$scope.refDoc = result.data;
         	return limitToFilter($scope.refDoc, 10);
         });
-
-        
-       // return $scope.products;
       };
       
 	  $scope.onSelectRefDocotor = function(item, model, label){
@@ -284,9 +292,13 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 
     
     $scope.changePatientType = function(patientType){
+
+        var req = "CREATE";
+        if($scope.patientData.type){
+            req= "UPDATE";
+        }
     	
-    	
-    	var dataString = "query=3" + "&patientType=" + patientType.id + "&patientDetailID=" + $scope.patientData.patientDetailID + "&patientID=" + $scope.patientData.patientID;
+    	var dataString = "query=3" + "&patientType=" + patientType.id + "&req=" + req + "&patientID=" + $scope.patientData.patientID;
 
         $http({
             method: 'POST',
@@ -347,15 +359,13 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 		$scope.bringPrescribedComment($scope.appoinmentData.appointmentID);
 		$scope.bringPrescribedNextVisit($scope.appoinmentData.appointmentID);
         $scope.bringClinicalRecord($scope.appoinmentData.appointmentID);
+        $scope.bringDietInfo($scope.appoinmentData.appointmentID);
     };
 
 
     $scope.clinicalRecordList = [];
     $scope.bringClinicalRecord = function (appointmentID) {
-
-
         var dataString = "query=12" + '&appointmentID=' + appointmentID + '&contentType=' + 'CLINICAL_RECORD';
-
         $http({
             method: 'POST',
             url: "phpServices/commonServices/prescriptionDetailService.php",
@@ -378,6 +388,24 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             });
         });
     };
+
+    $scope.bringDietInfo = function (appointmentID) {
+        var dataString = "query=12" + '&appointmentID=' + appointmentID + '&contentType=' + 'DIET';
+        $http({
+            method: 'POST',
+            url: "phpServices/commonServices/prescriptionDetailService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.dietData = {};
+            if(result && result.length > 0){
+                $scope.dietData.id = result[0].contentDetailID;
+                $scope.dietData.dietName = result[0].detail;
+            }
+        });
+    };
+
+
     $scope.historyList = [];
     
     $scope.bringPrescribedHistory = function(appointmentID, patientID){
@@ -564,7 +592,8 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             });
         }
     }, true);
-	
+
+
 	$scope.bringPrescribedInv = function (appointmentID){
 		
 		$scope.invAdderData = {};
@@ -1160,6 +1189,50 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 		modalInstance.result.then(function(result) {
 			$scope.bringAppoinmentInfo();
 	     });
+    };
+
+    $scope.performDiet = function (dietData) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'javascript/templates/diet/diet.html',
+            windowClass: 'fade in',
+            size: 'sm',
+            controller: 'PrescriptionController.PrescribeDietController',
+            resolve: {
+                record: function () {
+                    return {
+                        dietData
+                    };
+                }
+            },
+            backdrop: 'static'
+        });
+        modalInstance.result.then(function(result) {
+            $scope.bringDietInfo();
+        });
+    };
+
+    $scope.managePatientType = function () {
+
+        var patientTypeList = angular.copy($scope.patientTypeList);
+        var patientTypeData = {};
+        var modalInstance = $modal.open({
+            templateUrl: 'javascript/templates/patient/patientType.html',
+            windowClass: 'fade in',
+            size: 'sm',
+            controller: 'PatientTypeController',
+            resolve: {
+                record: function () {
+                    return {
+                        patientTypeList
+                    };
+                }
+            },
+            backdrop: 'static'
+        });
+        modalInstance.result.then(function(result) {
+            $scope.patientTypeList = result;
+        });
     };
     $scope.patientInfoEdit = false;
 

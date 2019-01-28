@@ -32,18 +32,20 @@ if($query_no== 0){
 }else if ($query_no == 11){
 
     $invName= $_POST['invName'];
+    $patientTypeId = $_POST['patientTypeId'];
 
     $invID = getInvIDByName($invName);
 
-    $sql = "INSERT INTO `doctor_followUp_setteing`( `doctorID`, `invID`) VALUES ('$doctorID','$invID')";
-
+    $sql = "INSERT INTO `doctor_followUp_setteing`( `doctorID`, `patientTypeId`, `invID`) VALUES ('$doctorID', '$patientTypeId', '$invID')";
     mysql_query($sql);
+    echo $sql;
 
 }else if ($query_no == 12){
+    $patientTypeId= $_POST['patientTypeId'];
     $sql = "SELECT dfs.`followUpSerttingID`, dfs.`doctorID`, dfs.`invID`, i.name AS invName
 			FROM `doctor_followup_setteing` dfs
 			JOIN inv i ON i.id = dfs.invID
-			WHERE dfs.doctorID = '$doctorID'";
+			WHERE dfs.doctorID = '$doctorID' and dfs.patientTypeId = $patientTypeId";
 
     $result=mysql_query($sql);
 

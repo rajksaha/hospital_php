@@ -9,6 +9,8 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 	$scope.recentStart = 0;
 	$scope.recentEnd = 0;
 	$scope.patientAppoinmentList = [];
+	$scope.patientTypeId = null;
+    $scope.followUpInvName = "";
 	
 	$scope.typeHeadSelected = false;
 	
@@ -29,16 +31,32 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
         
        // return $scope.products;
       };
+
+    $scope.getPatientType = function () {
+
+        var dataString = "query=2" + "&doctorType=" + 1;
+        $http({
+            method: 'POST',
+            url: "phpServices/prescription/prescriptionHelperService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.patientTypeList = result;
+        });
+    };
       
 	  $scope.onSelectInvName = function(item, model, label){
 		  $scope.invData.id = item.id;
+          $scope.followUpInvName = item.name;
 		  $scope.typeHeadSelected = true;
 	  };
 	
 
 	  $scope.addInvToFollowUp = function(followUpInvName){
-		  
-		  var dataString = 'query=11'+ '&invName=' + followUpInvName;
+
+          $scope.followUpInvName = "";
+          $("#fInvName").val("");
+          var dataString = 'query=11'+ '&invName=' + followUpInvName + "&patientTypeId=" + $scope.patientTypeId;;
 
 	        $http({
 	            method: 'POST',
@@ -46,7 +64,7 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 	            data: dataString,
 	            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	        }).success(function (result) {
-	        	$scope.inIt();
+                $scope.bringFollowUpChart($scope.patientTypeId);
 	        });
 	  };
 	  
@@ -60,25 +78,38 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 	            data: dataString,
 	            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	        }).success(function (result) {
-	        	$scope.inIt();
+	        	$scope.bringFollowUpChart($scope.patientTypeId);
 	        });
 	  };
+
+	  $scope.bringFollowUpChart = function (patientTypeId) {
+
+          $scope.followUpInvName = "";
+
+          $scope.patientTypeId = patientTypeId;
+          var dataString = 'query=12' + "&patientTypeId=" + patientTypeId;
+          $http({
+              method: 'POST',
+              url: "phpServices/inv/invCategoryService.php",
+              data: dataString,
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          }).success(function (result) {
+              $scope.followUpList = result;
+          });
+      };
 	  
 	  
 	$scope.inIt = function (){
-		
-		$scope.followUpInvName = "";
-		
-		var dataString = 'query=12';
-
+        var dataString = "query=2" + "&doctorType=" + 1;
         $http({
             method: 'POST',
-            url: "phpServices/inv/invCategoryService.php",
+            url: "phpServices/prescription/prescriptionHelperService.php",
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-        	$scope.followUpList = result;
+            $scope.patientTypeList = result;
         });
+
 	};
 
 	$scope.inIt();

@@ -1,0 +1,69 @@
+<div class="panel col-md-12 filter-panel">
+    <section  data-ng-show="true" class=" contacts row" id="generalInfoContact">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0"  >
+                        <input type="text"  class="form-control date" placeholder="Follow-up From" datepicker-popup="dd/MM/yyyy" close-text="Close" is_open="dt2" ng-focus="dt2 = true" ng-model="appointmentDate" is-open="false"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0"  >
+                        <input type="text"  class="form-control date" placeholder="Follow-up To" data-ng-change="addByDate = true" datepicker-popup="dd/MM/yyyy" close-text="Close" is_open="dt3" ng-focus="dt3 = true" ng-model="endDate"  is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByDate(appointmentDate , endDate)" data-ng-show="addByDate">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="disease = true" placeholder="Search By Diagnosis" typeahead="disease.name for disease in bringByDiseaseShow($viewValue)"  close-text="Close" ng-model="Disease" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByDisease(Disease)" data-ng-show="disease">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="diseaseww = true" placeholder="Search By Inv" typeahead="patient.name for patient in bringShowDname($viewValue)"  close-text="Close" ng-model="namee" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientName(namee)" data-ng-show="diseaseww">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="patientCode = true" placeholder="Search By Patient Name" typeahead="appointment.patientCode for appointment in BringByPatientID($viewValue)"  close-text="Close" ng-model="PCode" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientAddd(PCode)" data-ng-show="patientCode">
+                        <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="room-desc form-group m-b-0" >
+                        <input type="text"  class="form-control" data-ng-change="patientCode = true" placeholder="Search By Patient ID" typeahead="appointment.patientCode for appointment in BringByPatientID($viewValue)"  close-text="Close" ng-model="PCode" is-open="false"/>
+                        <button class="btn btn-primary" data-ng-click="bringByPatientAddd(PCode)" data-ng-show="patientCode">
+                            <span class='glyphicon glyphicon glyphicon-search' aria-hidden='true'></span> Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
