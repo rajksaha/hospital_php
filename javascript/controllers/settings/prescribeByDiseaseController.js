@@ -1,4 +1,4 @@
-app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $rootScope, limitToFilter, $location, JsonService, $window) {
+app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $rootScope, limitToFilter, $filter) {
 	
 	
 	$scope.masterDiseaseData = {};
@@ -28,12 +28,7 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
     
 	
 	$scope.bringSettings = function (){
-		
-		
-			
 		var dataString = "query=" + 3 + '&diagnosisName=' + $scope.diagnosisData.diseaseName;
-		
-
         $http({
             method: 'POST',
             url: "phpServices/prescriptionSetting/prescriptionSetting.php",
@@ -73,7 +68,6 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
         	$scope.invSettingList = result;
-        	 
         });
 	};
 	
@@ -170,10 +164,12 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
 		var prescription = {};
 			prescription.diseaseID = $scope.masterDiseaseData.diseaseID;
 			prescription.doctorID = $scope.doctorData.doctorID;
+			prescription.invSettingList = $scope.invSettingList;
 		var modalInstance = $modal.open({
 	        templateUrl: 'javascript/templates/settings/addInvModal.html',
 	        windowClass: 'fade in',
-	        
+            size: 'lg',
+            backdrop: 'static',
 	        controller: 'PrescribeSettingsController.AddInvToSettings',
 	        resolve: {
 	        	data: function () {
@@ -181,8 +177,8 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
 	                	prescription
 	                };
 	            }
-	        },
-	        backdrop: 'static'
+	        }
+
 	    });
 	    modalInstance.result.then(function(result) {
 	    	$scope.bringInvSettingData($scope.masterDiseaseData.diseaseID);
@@ -195,11 +191,12 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
 		var prescription = {};
 			prescription.diseaseID = $scope.masterDiseaseData.diseaseID;
 			prescription.doctorID = $scope.doctorData.doctorID;
+        	prescription.settingList = $scope.advieSettingList;
 		var modalInstance = $modal.open({
-	        templateUrl: 'javascript/templates/settings/addAdviceModal.html',
+	        templateUrl: 'javascript/templates/settings/addAdviceModal1.html',
 	        windowClass: 'fade in',
-	        
-	        controller: 'PrescribeSettingsController.AddAdvcieToSettings',
+            size: 'lg',
+	        controller: 'PrescribeSettingsController.AddAdviceToSettings',
 	        resolve: {
 	        	data: function () {
 	                return {
@@ -250,62 +247,123 @@ app.controller('PrescribeByDiseaseController', function($scope, $http, $modal, $
 
 
 
-app.controller('PrescribeSettingsController.AddInvToSettings', function($scope, $modalInstance, data, $http, $window, $location,limitToFilter) {
+app.controller('PrescribeSettingsController.AddInvToSettings', function($scope, $modalInstance, data, $http, $window, $location,limitToFilter, $filter) {
 	
 	$scope.postData = data;
 	$scope.postData.note = "";
-	
-	$scope.createInvSetting = function (){
-		
-		if(validator.validateForm("#validateReq","#lblMsg_modal",null)) {
-			var dataString = "query=6" + '&diseaseID=' + $scope.postData.prescription.diseaseID + '&doctorID=' + $scope.postData.prescription.doctorID + "&invName=" + $scope.postData.invName + "&note=" + $scope.postData.note;
 
-	        $http({
-	            method: 'POST',
-	            url: "phpServices/prescriptionSetting/prescriptionSetting.php",
-	            data: dataString,
-	            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-	        }).success(function (result) {
-	        	$modalInstance.close();
-	        });
-		}else{
-			$scope.error = true;
-		}
-		
-        
-    };
-    
-    $scope.getInvNameForMaster = function(term){
-		
-		
-		var dataString = 'query=8'+ '&queryString=' + term;
-        
-        return $http({
+
+
+
+    $scope.bringInvCategory = function (){
+        var dataString = "query=59";
+        $http({
             method: 'POST',
-            url: "phpServices/prescriptionSetting/prescriptionSetting.php",
+            url: "phpServices/appointment/appointmentHelper.php",
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(function(result) {
-        	$scope.invsttingNameData = result.data;
-        	return limitToFilter($scope.invsttingNameData, 10);
+        }).success(function (result) {
+            $scope.invCategoryList = result;
+            $scope.invCategoryList.push({name : "No Category", invCategoryID : 0});
         });
 	};
+
+    $scope.bringInvByCategory = function (invCategoryID) {
+        var dataString = "query=60&invCategoryID=" + invCategoryID;
+        $http({
+            method: 'POST',
+            url: "phpServices/appointment/appointmentHelper.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.invCategoryDataList = result;
+            if($scope.postData.prescription.invSettingList && $scope.postData.prescription.invSettingList.length > 0){
+                angular.forEach($scope.postData.prescription.invSettingList, function(value, key) {
+                    var data = $filter('filter')($scope.invCategoryDataList, {id: value.invID}, true);
+                });
+			}
+
+
+        });
+    };
+
 	
-	$scope.onSelectInvNameMaster = function (item, model, label){
-	};
-	
+	$scope.addToInvSetting = function (add, inv){
+
+		if(!add){
+            inv.addedToPrescription = false;
+            if(inv.invSettingId){
+                var dataString = "query=11" + "&invSettingId=" + inv.invSettingId;
+
+                $http({
+                    method: 'POST',
+                    url: "phpServices/prescriptionSetting/prescriptionSetting.php",
+                    data: dataString,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function (result) {
+                    inv.invSettingId = null;
+                });
+			}
+		}else{
+            inv.addedToPrescription = true;
+            var dataString = "query=6" + '&diseaseID=' + $scope.postData.prescription.diseaseID + '&doctorID=' + $scope.postData.prescription.doctorID + "&invId=" + inv.id + "&note=" + $scope.postData.note;
+
+            $http({
+                method: 'POST',
+                url: "phpServices/prescriptionSetting/prescriptionSetting.php",
+                data: dataString,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (result) {
+                inv.invSettingId = result;
+            });
+		}
+    };
+
 	$scope.cancel = function (){
-		$modalInstance.dismiss('cancel');
+        $modalInstance.close();
 	};
+
+    $scope.bringInvCategory();
 	
 	
 });
 
-app.controller('PrescribeSettingsController.AddAdvcieToSettings', function($scope, $modalInstance, data, $http, $window, $location,limitToFilter) {
+app.controller('PrescribeSettingsController.AddAdviceToSettings', function($scope, $modalInstance, data, $http, $window, $location,limitToFilter, $filter) {
 	
 	$scope.postData = data;
 	
 	$scope.type = 0;
+
+    $scope.addToAdviceSetting = function (add, advice){
+
+        if(!add){
+            advice.addedToPrescription = false;
+            if(advice.settingId){
+                var dataString = "query=10" + "&settingID=" + advice.settingId;
+
+                $http({
+                    method: 'POST',
+                    url: "phpServices/prescriptionSetting/prescriptionSetting.php",
+                    data: dataString,
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function (result) {
+                    advice.settingId = null;
+                });
+            }
+        }else{
+            advice.addedToPrescription = true;
+            var dataString = "query=7" + '&diseaseID=' + $scope.postData.prescription.diseaseID + '&doctorID=' + $scope.postData.prescription.doctorID + "&adviceID=" + advice.id;
+
+            $http({
+                method: 'POST',
+                url: "phpServices/prescriptionSetting/prescriptionSetting.php",
+                data: dataString,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (result) {
+                advice.settingId = result;
+            });
+        }
+    };
 	
 	$scope.saveNewAdviceSetting = function (){
 		
@@ -349,90 +407,51 @@ app.controller('PrescribeSettingsController.AddAdvcieToSettings', function($scop
        // return $scope.products;
       };
       
-	  $scope.onSelectAdviceName = function(item, model, label){
-		  $scope.name = item.advice;
-	  };
+  $scope.onSelectAdviceName = function(item, model, label){
+	  $scope.name = item.advice;
+  };
+
+
+    $scope.bringPrescribedAdvice = function (){
+
+        $scope.adviceAdderData = {};
+        $scope.adviceAdderData.lang = 0;
+
+        var dataString = "query=1";
+
+        $http({
+            method: 'POST',
+            url: "phpServices/advice/adviceService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.advcieSettingData = result;
+
+            if($scope.postData.prescription.settingList && $scope.postData.prescription.settingList.length > 0){
+                angular.forEach($scope.postData.prescription.settingList, function(value, key) {
+                    var data = $filter('filter')($scope.advcieSettingData, {id: value.adviceID}, true);
+                    if(data && data.length > 0){
+                        data[0].settingId = value.id;
+                        data[0].addedToPrescription =  true;
+                    }else {
+                        data[0].addedToPrescription = false;
+                    }
+                });
+            }
+        });
+    };
     
 
 	
 	$scope.cancel = function (){
-		$modalInstance.dismiss('cancel');
+		$modalInstance.close();
 	};
+
+    (function(){
+        $scope.bringPrescribedAdvice();
+    })()
 	
 	
 	
 	
 });
-
-
-
-
-/*function lookupDrug(inputString) {
-	if(inputString.length == 0) {
-		$('.drugSuggetionBox').fadeOut(); // Hide the suggestions box
-	} else {
-			var type = parseInt($("#drugTypeAdder").val()) + 1 ;
-            $.post("phpServices/prescriptionSetting/prescriptionSetting.php", {drugName: ""+inputString+"", query : 4 , drugType : type}, function(data) { // Do an AJAX call
-			$('.drugSuggetionBox').fadeIn(); // Show the suggestions box
-			$('.drugSuggetionBox').html(data); // Fill the suggestions box
-		});
-	}
-}
-
-function autocompleteDrugs(dataString) {
-	$('.drugAdderName').val(dataString);
-	$('.drugSuggetionBox').fadeOut();
-	$('.drugSuggetionBox').hide();
-}
-
-function lookupInv(inputString) {
-	if(inputString.length == 0) {
-		$('.suggetionBox').fadeOut(); // Hide the suggestions box
-	} else {
-            $.post("phpServices/diagnosis/diagnosis.php", {queryString: ""+inputString+"", query : 0}, function(data) { // Do an AJAX call
-			$('.suggetionBoxInv').fadeIn(); // Show the suggestions box
-			$('.suggetionBoxInv').html(data); // Fill the suggestions box
-		});
-	}
-}
-
-function autocompleteInv(dataString) {
-	$('.adderNameInv').val(dataString);
-	$('.suggetionBoxInv').fadeOut();
-	$('.suggetionBoxInv').hide();
-}
-
-function lookupInv(inputString) {
-	if(inputString.length == 0) {
-		$('.suggetionBoxInv').fadeOut(); // Hide the suggestions box
-	} else {
-            $.post("phpServices/prescriptionSetting/prescriptionSetting.php", {queryString: ""+inputString+"", query : 8}, function(data) { // Do an AJAX call
-			$('.suggetionBoxInv').fadeIn(); // Show the suggestions box
-			$('.suggetionBoxInv').html(data); // Fill the suggestions box
-		});
-	}
-}
-
-function autocompleteInv(dataString) {
-	$('.adderNameInv').val(dataString);
-	$('.suggetionBoxInv').fadeOut();
-	$('.suggetionBoxInv').hide();
-}
-
-function lookupAdvice(inputString) {
-	if(inputString.length == 0) {
-		$('.suggetionBoxAdvice').fadeOut(); // Hide the suggestions box
-	} else {
-			var lang = parseInt($("#langSelector").val()) ;
-            $.post("phpServices/prescriptionSetting/prescriptionSetting.php", {queryString: ""+inputString+"", query : 9, lang : lang}, function(data) { // Do an AJAX call
-			$('.suggetionBoxAdvice').fadeIn(); // Show the suggestions box
-			$('.suggetionBoxAdvice').html(data); // Fill the suggestions box
-		});
-	}
-}
-
-function autocompleteAdvice(dataString) {
-	$('.adderNameAdvice').val(dataString);
-	$('.suggetionBoxAdvice').fadeOut();
-	$('.suggetionBoxAdvice').hide();
-}*/

@@ -11,7 +11,7 @@
     <div  class="row step4Width" id="validateReq">
         <div class="form-group col-xs-12 col-sm-12">
             <label>Inv Name: <span class="red" >*</span></label>
-            <input maxlength="100" errmsg="Please Select Inv Name" type="text" data-ng-model="invData.name" typeahead="invsttingNameData.name for invsttingNameData in getInvName($viewValue)"  class="form-control required" placeholder="Add Inv" typeahead-on-select='onSelectInvName($item, $model, $label)'/>
+            <input maxlength="100" errmsg="Please Select Inv Name" type="text" data-ng-model="invData.name" typeahead="invNameData.name for invNameData in getInvName($viewValue)"  class="form-control required" placeholder="Add Inv" typeahead-on-select='onSelectInvName($item, $model, $label)'/>
         </div>
     </div>
 

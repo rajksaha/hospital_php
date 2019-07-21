@@ -93,25 +93,27 @@
                         <div class="panelChild-body form-group" data-ng-show="appointmentData.status == 0"  >
                             <span class="textSpc" data-ng-click="letsPrescribe(appointmentData)" >{{$index + 1}} | {{appointmentData.name}} | {{appointmentData.age}} yrs  | {{appointmentData.address}} | {{appointmentData.time}} - {{appointmentData.appointmentTypeName}}</span>
 
-                            <button class="btn btn-danger pull-right" data-ng-if="hasAccess('DELETE_APPOINTMENT')"
-										ktr-confirmation="removeFromAppointment(appointmentData.appointmentID)" 
-										confirmation-message="Are you sure to remove?"
-										confirmation-title="Confirmation">
-										<span class='glyphicon glyphicon glyphicon-remove' aria-hidden='true'></span>
+
+                            <span class="textSpc pull-right" data-ng-if="hasAccess('DELETE_APPOINTMENT')">
+										<button class="btn btn-danger pull-right" style="margin-top: -8px"
+                                                ktr-confirmation="removeFromAppointment(appointmentData.appointmentID)"
+                                                confirmation-message="Are you sure to remove?"
+                                                confirmation-title="Confirmation">
+										    <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
 										</button>
+                            </span>
                         </div>
-                        <div  class="panelVisited-body form-group " data-ng-show="appointmentData.status == 1"
+                        <div  class="panelVisited-body form-group" data-ng-show="appointmentData.status == 1"
                               ktr-confirmation="letsPrescribe(item)"
                               confirmation-message="Want to re-visit this patient?"
                               confirmation-title="Confirmation"
                               item="appointmentData">
                             <span class="textSpc">{{$index + 1}} | {{appointmentData.name}} | {{appointmentData.age}} yrs  | {{appointmentData.address}}</span>
                             <span class="textSpc pull-right">
-										<button class="btn btn-info pull-right" >
+										<button class="btn btn-info pull-right" style="margin-top: -8px">
 										    <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
 										</button>
-										
-										</span>
+                            </span>
                         </div>
                     </div>
                 </div>

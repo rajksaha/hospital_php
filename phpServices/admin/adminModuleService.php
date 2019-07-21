@@ -79,6 +79,13 @@ if($query_no== 0){
         array_push($data,$row);
     }
     echo json_encode($data);
+}elseif ($query_no == 6){
+
+    $userId = $_POST['userId'];
+    $activeStatus = $_POST['activeStatus'];
+    $sql = "UPDATE `user_profile` SET `isActive`= $activeStatus WHERE `userID` = $userId";
+    mysql_query($sql);
+
 }
 
 ?>

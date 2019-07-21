@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS `doctor_data_backup` (
+  `doctorID` int(11) NOT NULL,
+  `lastBackupDate` date NOT NULL,
+  PRIMARY KEY (`doctorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `doctor_data_backup` (`doctorID`, `lastBackupDate`) VALUES
+(16, '2019-04-14');
+
+ALTER TABLE patient ADD COLUMN `hospitalName` varchar(255) NOT NULL;
+ALTER TABLE patient ADD COLUMN `bedNum` varchar(55) NOT NULL;
+ALTER TABLE patient ADD COLUMN `wardNum` varchar(55) NOT NULL;
+ALTER TABLE patient ADD COLUMN `headOfUnit` varchar(255) NOT NULL;
+
+
+ALTER TABLE drug_prescription ADD COLUMN `presNum` int(11) NOT NULL;
+
+ALTER TABLE  `doctor_followup_setteing` ADD  `patientTypeId` INT( 11 ) NOT NULL;
+
+ALTER TABLE  `follow_up_result` ADD  `appID` INT( 11 ) NOT NULL AFTER  `resultID`;
+
+
+
+INSERT INTO  `app_access` (
+`accessID` ,
+`accessCode` ,
+`accessDesc` ,
+`accessType` ,
+`parentAccessID`
+)
+VALUES (
+NULL ,  'FOLLOW_UP_REPORT',  'FOLLOW_UP_REPORT',  'SUB',  '2'
+);
+
+
+

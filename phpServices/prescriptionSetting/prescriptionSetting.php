@@ -97,37 +97,16 @@ else if($query_no == 4){
 }elseif ($query_no == 6){
 	
 	$doctorID = $_POST['doctorID'];
-	$invName = $_POST['invName'];
-	$note = $_POST['note'];
+    $invID = $_POST['invId'];
 	$diseaseID = $_POST['diseaseID'];
-	
-	$invID = getInvIDByName($invName);
-	
-		insertSingleInvToSetting($doctorID, $diseaseID, $invID, $note);
-	
-	
+    echo insertSingleInvToSetting($doctorID, $diseaseID, $invID, null);
 }
 
 elseif ($query_no == 7){
-
 	$doctorID = $_POST['doctorID'];
-	$advice = $_POST['adviceName'];
-	$result = mysql_query("SELECT ds.`category` 
-				FROM `doctor` d
-				JOIN  doctorsettings ds ON d.doctorID = ds.doctorID
-				WHERE d.`doctorCode` = '$doctorID'");
-	
-	$rec = mysql_fetch_assoc($result);
-	$type = $rec['category'];
+	$adviceID = $_POST['adviceID'];
 	$diseaseID = $_POST['diseaseID'];
-
-	$adviceID = getAdivceIDByName($advice, $type);
-
-	 insertSingleAdviceToSetting($doctorID, $diseaseID, $adviceID);
-	 
-	 echo $adviceID;
-
-
+    echo insertSingleAdviceToSetting($doctorID, $diseaseID, $adviceID);
 
 }else if($query_no == 8){
 
@@ -150,8 +129,8 @@ elseif ($query_no == 7){
 	
 }else if($query_no == 10){
 
-	$advciceSettingID =$_POST['advciceSettingID'];
-	mysql_query("DELETE FROM `settings_advice` WHERE `id` = '$advciceSettingID'");
+	$settingID =$_POST['settingID'];
+	mysql_query("DELETE FROM `settings_advice` WHERE `id` = '$settingID'");
 	
 }else if($query_no == 11){
 

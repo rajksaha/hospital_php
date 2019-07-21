@@ -36,7 +36,7 @@ else if($query_no== 1){
 }
 elseif ($query_no == 2){
 	$dietName = $_POST['dietName'];
-    insertContentDetail($appointmentID, "DIET", $dietName, "");
+    echo insertContentDetail($appointmentID, "DIET", $dietName, "");
 }
 
 elseif ($query_no == 3){

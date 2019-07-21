@@ -1,0 +1,84 @@
+-- phpMyAdmin SQL Dump
+-- version 3.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Apr 20, 2019 at 05:42 AM
+-- Server version: 5.7.11-log
+-- PHP Version: 5.3.13
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `doctorplatform`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `app_access`
+--
+
+CREATE TABLE IF NOT EXISTS `app_access` (
+  `accessID` int(11) NOT NULL AUTO_INCREMENT,
+  `accessCode` varchar(55) NOT NULL,
+  `accessDesc` text NOT NULL,
+  `accessType` varchar(55) NOT NULL,
+  `parentAccessID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`accessID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+
+--
+-- Dumping data for table `app_access`
+--
+
+INSERT INTO `app_access` (`accessID`, `accessCode`, `accessDesc`, `accessType`, `parentAccessID`) VALUES
+(1, 'APPOINTMENT', 'Appointment', 'MAIN', NULL),
+(2, 'RESEARCH', 'Research', 'MAIN', NULL),
+(3, 'CREATE_NEW_APP', 'Create New Appointment', 'SUB', 1),
+(4, 'CREATE_FOLLOW_APP', 'Follow-up Appointment', 'SUB', 1),
+(5, 'ALL_APP_LIST', 'ALL_APP_LIST', 'SUB', 2),
+(6, 'PATIENT_LIST', 'PATIENT_LIST', 'SUB', 2),
+(7, 'FUTURE_APP_LIST', 'FUTURE_APP_LIST', 'SUB', 2),
+(8, 'SETTINGS', 'SETTINGS', 'MAIN', NULL),
+(9, 'CREATE_TEMPLATE', 'CREATE_TEMPLATE', 'SUB', 8),
+(10, 'INV_CATEGORY', 'INV_CATEGORY', 'SUB', 8),
+(11, 'DRUG_ADVICE', 'DRUG_ADVICE', 'SUB', 8),
+(12, 'DEF_FOLLOW_UP', 'DEF_FOLLOW_UP', 'SUB', 8),
+(13, 'DISEASE', 'DISEASE', 'SUB', 8),
+(14, 'SYMPTOM', 'SYMPTOM', 'SUB', 8),
+(15, 'DATABASE', 'DATABASE', 'SUB', 8),
+(16, 'VIEW_APPOINTMENT_LIST', 'VIEW_APPOINTMENT_LIST', 'MAIN', NULL),
+(17, 'SEARCH_APPOINTMENT', 'SEARCH_APPOINTMENT', 'SUB', 16),
+(18, 'DASHBOARD_REPORT', 'DASHBOARD_REPORT', 'MAIN', NULL),
+(19, 'DELETE_APPOINTMENT', 'DELETE_APPOINTMENT', 'SUB', 16),
+(20, 'VISIT_APPOINTMENT', 'VISIT_APPOINTMENT', 'SUB', 16),
+(21, 'PRESCRIPTION', 'Prescription', 'MAIN', NULL),
+(22, 'HISTORY', 'HISTORY', 'SUB', 21),
+(23, 'OLD_PRESCRIPTION', 'OLD_PRESCRIPTION', 'SUB', 21),
+(24, 'FOLLOW_UP_CHART', 'FOLLOW_UP_CHART', 'SUB', 21),
+(25, 'PRINT', 'PRINT', 'SUB', 21),
+(26, 'PATIENT_PHOTO', 'PATIENT_PHOTO', 'SUB', 21),
+(27, 'REF_DOCTOR', 'REF_DOCTOR', 'SUB', 21),
+(28, 'VISIT_TYPE', 'VISIT_TYPE', 'SUB', 21),
+(29, 'CHIEF_COMPLAIN', 'CHIEF_COMPLAIN', 'SUB', 21),
+(30, 'INVESTIGATION', 'INVESTIGATION', 'SUB', 21),
+(31, 'CLINICAL_NOTE', 'CLINICAL_NOTE', 'SUB', 21),
+(32, 'ON_EXAMINATION', 'ON_EXAMINATION', 'SUB', 21),
+(33, 'CLINICAL_RECORD', 'CLINICAL_RECORD', 'SUB', 21),
+(34, 'NEXT_VISIT', 'NEXT_VISIT', 'SUB', 21),
+(35, 'DIAGNOSIS', 'DIAGNOSIS', 'SUB', 21),
+(36, 'PRES_DRUGS', 'PRES_DRUGS', 'SUB', 21),
+(37, 'PRES_ADVICE', 'PRES_ADVICE', 'SUB', 21),
+(38, 'EDIT_PATIENT_INFO', 'EDIT_PATIENT_INFO', 'SUB', 21);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

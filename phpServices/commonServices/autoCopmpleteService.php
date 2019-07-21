@@ -85,7 +85,7 @@ function getDiet($queryString){
 
     $sql = "SELECT `contentDetailID`, `detail` FROM `contentdetail` 
             WHERE `contentType` = 'DIET' 
-            AND `detail` LIKE '" . $queryString . "%' LIMIT 10";
+            AND `detail` LIKE '" . $queryString . "%' GROUP BY `detail` LIMIT 10";
 
     $result=mysql_query($sql);
     $data = array();

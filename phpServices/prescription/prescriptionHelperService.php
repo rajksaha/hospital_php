@@ -60,19 +60,20 @@ if($query_no==2){
 }
 else if($query_no==3){
 	$patientType = $_POST['patientType'];
-	$req = $_POST['req'];
 	$patientID = $_POST['patientID'];
 
 
-	if(ltrim($req) == 'UPDATE'){
-		$sql = "UPDATE `patient_detail` SET `type`='$patientType' WHERE patientID = '$patientID'";
-	}else {
+	$prevResult = mysql_query("SELECT * FROM `patient_detail` WHERE patientID = $patientID");
+
+    if(mysql_fetch_assoc($prevResult)){
+        $sql = "UPDATE `patient_detail` SET `type`='$patientType' WHERE patientID = '$patientID'";
+    }else{
         $sql = "INSERT INTO `patient_detail`(`patientID`, `type`) VALUES ('$patientID',$patientType)";
     }
 	mysql_query($sql);
+    echo $sql;
 
-
-        //delete patient follow-up, values
+    //delete patient follow-up, values
     mysql_query("DELETE FROM `patient_follow_up` WHERE `patientID` = $patientID");
     // insert new
     $sql ="SELECT `followUpSerttingID`, `doctorID`, `patientTypeId`, `invID` FROM `doctor_followup_setteing` WHERE `doctorID` = $doctorID AND `patientTypeId` = $patientType";
@@ -82,7 +83,6 @@ else if($query_no==3){
     while ($row=mysql_fetch_array($result)){
         $invId = $row['invID'];
         mysql_query("INSERT INTO `patient_follow_up`( `patientID`, `doctorID`, `invID`) VALUES ($patientID, $doctorID, $invId)");
-        echo $sql;
     }
 }
 else if($query_no==4){
@@ -228,8 +228,24 @@ elseif ($query_no == 15){
 	$id = $_POST['id'];
     $occupation = $_POST['occupation'];
     $referredBy = $_POST['referredBy'];
+    $hospitalName = $_POST['hospitalName'];
+    $bedNum = $_POST['bedNum'];
+    $wardNum = $_POST['wardNum'];
+    $headOfUnit = $_POST['headOfUnit'];
 	
-	mysql_query("UPDATE `patient` SET `name`='$name',`age`='$age',`sex`='$sex',`address`='$address',`phone`='$phone',`referredBy`='$referredBy',`occupation`='$occupation' WHERE `patientID` = '$id'");
+	mysql_query("UPDATE `patient` SET 
+                        `name`='$name',
+                        `age`='$age',
+                        `sex`='$sex',
+                        `address`='$address',
+                        `phone`='$phone',
+                        `referredBy`='$referredBy',
+                        `hospitalName`='$hospitalName',
+                        `bedNum`='$bedNum',
+                        `wardNum`='$wardNum',
+                        `headOfUnit`='$headOfUnit',
+                        `occupation`='$occupation' 
+                        WHERE `patientID` = '$id'");
 	
 }elseif ($query_no == 17){
 
@@ -283,6 +299,18 @@ elseif ($query_no == 15){
     $queryString=$_POST['detail'];
 
     $sql ="SELECT detail FROM `contentdetail` WHERE contentType = 'CLINICAL_RECORD' and detail LIKE '" . $queryString . "%' LIMIT 10";
+    $result=mysql_query($sql);
+    //echo $sql;
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+    echo json_encode($data);
+}elseif ($query_no == 22){
+
+    $queryString=$_POST['detail'];
+
+    $sql ="SELECT detail FROM `contentdetail` WHERE contentType = 'COMMENT' and detail LIKE '" . $queryString . "%' GROUP BY `detail` LIMIT 10";
     $result=mysql_query($sql);
     //echo $sql;
     $data = array();

@@ -247,5 +247,47 @@ else if($query_no==68){
 }else if($query_no==10){
 	$appointmentID=$_POST['appointmentID'];
 	mysql_query("UPDATE `appointment` SET`status`= 2 WHERE `appointmentID` = $appointmentID");
+}else if($query_no==58){
+    $doctorType = $_POST['doctorType'];
+    $sql = "SELECT `id`, `doctorType`, `typeName` FROM `patient_type` WHERE doctorType = '$doctorType'";
+    $result=mysql_query($sql);
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+    echo json_encode($data);
+}else if ($query_no == 59){
+
+
+    $sql = "SELECT `invCategoryID`, `name` FROM `inv_category`";
+
+    $result = mysql_query($sql);
+
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+
+    echo json_encode($data);
+
+}else if ($query_no == 60){
+
+    $categoryID = $_POST['invCategoryID'];
+
+    $sql = "SELECT i.`id` , i.`name`
+			FROM `inv` i
+			JOIN doctor_inv_setteing dis ON i.id = dis.invID AND i.categoryID = $categoryID
+			LEFT JOIN inv_category ic ON ic.invCategoryID = i.categoryID 
+			WHERE dis.doctorID = '$doctorID' ORDER BY `name` ";
+
+    $result = mysql_query($sql);
+
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+
+    echo json_encode($data);
+
 }
 ?>

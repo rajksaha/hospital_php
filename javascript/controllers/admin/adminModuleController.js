@@ -51,6 +51,19 @@ app.controller('AdminModuleController', function($scope, $http, $modal, $rootSco
         $scope.processEditor(dataString, userProfile);
     };
 
+    $scope.changeUserStatus = function (userProfile, status) {
+
+        var dataString = "query=6" + "&userId=" + userProfile.userID + '&activeStatus=' + status ;
+        $http({
+            method: 'POST',
+            url: "phpServices/admin/adminModuleService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            userProfile.isActive = status;
+        });
+    };
+
     $scope.editUser = function(user){
         var dataString = "query=1&userId="+user.userID;
         $scope.processEditor(dataString, user);

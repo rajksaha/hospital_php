@@ -72,7 +72,7 @@ else if($query_no==4){
 	
 	$requestedID = $_POST['requestedID'];
 	
-	$result = mysql_query("SELECT `id`, `appointMentID`, `drugTypeID`, `drugID`, `drugTimeID`, `drugDoseUnit`, `drugWhenID`, `drugAdviceID` FROM `drug_prescription` WHERE `id` = '$requestedID'");
+	$result = mysql_query("SELECT `id`, `appointMentID`, `drugTypeID`, `drugID`, `drugTimeID`, `drugDoseUnit`, `drugWhenID`, `drugAdviceID`, `presNum` FROM `drug_prescription` WHERE `id` = '$requestedID'");
 	
 	$row = mysql_fetch_assoc($result);
 	
@@ -91,7 +91,6 @@ else if($query_no==4){
 		}else{
 			mysql_query("INSERT INTO `dose_period`(`drugPrescribeID`, `dose`, `numOfDay`, `durationType`) VALUES ($drugPrescribeID, '$drugDose', $drugNoDay, $drugNoDayType)");
 		}
-		
 	}
 	
 	

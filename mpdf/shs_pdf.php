@@ -5,6 +5,7 @@ include('../phpServices/config.inc');
 $username=$_SESSION['username'];
 $appointmentID = $_SESSION['printAppointmentID'];
 $patientCode = $_SESSION['printPatientCode'];
+$doctorID = $_SESSION['doctorID'];
 $date = date('d M, Y');
 include('../phpServices/commonServices/appointmentService.php');
 include('../phpServices/commonServices/prescriptionService.php');
@@ -24,9 +25,6 @@ function Footer() {
 function ShowPatInfo($patientCode,$yAxis, $appointmentID, $appData){
 
         $resultData = getPatientInformaition($patientCode);
-
-
-
         $weight = 0;
 
         $vitalResultData = getPrescribedVital($appointmentID);
@@ -54,14 +52,9 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID, $appData){
 
         $age = $rec['age'];
 
-        $sex = $rec['sex'];
-
-        $address = $rec['address'];
-
-        $phone = $rec['phone'];
-
         $date = $appData['date'];
 
+        $formattedDate = date("d M, Y", strtotime($date));
         $this->SetXY(100,$yAxis + 11);
         $this->MultiCell(65,5, "ID No: $patientCode");
 
@@ -80,7 +73,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID, $appData){
         //$this->MultiCell(30, 5, "$sex");
 
         $this->SetXY(160, $yAxis + 11);
-        $this->MultiCell(50,5, "$date");
+        $this->MultiCell(50,5, "$formattedDate");
 
 
         $this->SetXY(100, $yAxis + 5);
@@ -322,6 +315,26 @@ function Show_Drug_History($appointmentID,$xAxis,$yAxis, $maxX , $size, $conentT
         return $this->GetY();
 
     }
+
+    function show_diet($appointmentID,$xAxis,$yAxis,$size){
+
+
+        $resultData = getContentDetail($appointmentID, "DIET");
+        $rec = mysql_fetch_assoc($resultData);
+
+        if($rec['detail'] != ""){
+            $this->SetFont('nikosh','B',$size);
+            $this->SetXY($xAxis, $yAxis);
+            $this->MultiCell(110,5, "Diet");
+            $this->SetFont('nikosh','',$size);
+            $this->SetXY($xAxis, $yAxis +5 );
+            $this->MultiCell(110,5, $rec['detail']);
+            return $this->GetY();
+        }
+
+        return $yAxis;
+
+    }
     function show_nextVisit($appointmentID,$xAxis,$yAxis,$size){
 
 
@@ -449,7 +462,7 @@ function Show_Drug_History($appointmentID,$xAxis,$yAxis, $maxX , $size, $conentT
 
     }
 
-function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
+    function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
 
         $resultData = getPresCribedDrugs($appointmentID);
 
@@ -565,7 +578,16 @@ function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
                 if($drugNoDay == 0){
                     $drugNoDay = "";
                 }
-                $restOftheString = "- $drugWhen - $drugAdvice - $drugNoDay $drugNoDayType";
+                $restOfTheString = "";
+                if($drugWhen != ""){
+                    $restOfTheString = $restOfTheString . " - " . $drugWhen;
+                }
+                if($drugAdvice != ""){
+                    $restOfTheString = $restOfTheString . " - " . $drugAdvice;
+                }
+                if($drugNoDay == null || $drugNoDay != "" || $drugNoDay != 0){
+                    $restOfTheString = $restOfTheString . " - " . $drugNoDay . $drugNoDayType;
+                }
 
             }else{
                 $index= 0;
@@ -592,7 +614,10 @@ function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
                     }
 
                     $text = "";
-                    if($drugDoseInitial == ""){
+                    if($drugTime == -4 || $drugTime == -5 || $drugTime == -6){
+                        $text = "$drugDose";
+                        $drugDoseInitial = "";
+                    }else if($drugDoseInitial == ""){
                         $text = "($drugDose)";
                     }else{
                         $text = "($drugDose) $drugDoseInitial";
@@ -607,15 +632,17 @@ function Show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
 
                 }
 
-                $restOftheString = " $drugWhen $drugAdvice $periodText ";
+                $restOfTheString = " $drugWhen $drugAdvice $periodText ";
                 $drugDose = "";
             }
 
             $full_str = "";
             if($drugDoseInitial == "" || $drugDose == ''){
-                $full_str = "$drugDose $restOftheString|";
+                $full_str = "$drugDose $restOfTheString|";
+            }else if($drugTime == -4 || $drugTime == -5 || $drugTime == -6){
+                $full_str ="$drugDose $restOfTheString|";
             }else{
-                $full_str ="($drugDose) $drugDoseInitial $restOftheString|";
+                $full_str ="($drugDose) $drugDoseInitial $restOfTheString|";
             }
 
             $full_str = $this->convertNumberToBangla($full_str);
@@ -666,7 +693,7 @@ $pdf->page = $pageNum;
 
 $pdf->Line($rightXaxis - 10 , 62, $rightXaxis - 10, 260, $lineStyle);
 
-
+$rightYaxis = $pdf->show_diet($appointmentID,$rightXaxis, $rightYaxis,$size, $pageNum, $pdf);
 $rightYaxis = $pdf->Show_med($appointmentID,$rightXaxis, $rightYaxis,$size, $pageNum, $pdf);
 $rightYaxis = $pdf->checkForPageChange($rightYaxis, $pdf->page);
 $rightYaxis = $pdf->Show_advice($appointmentID,$rightXaxis,$rightYaxis + 5,$size ,$maxXForRight);
@@ -680,9 +707,9 @@ $pageNum = 1;
 $pdf->page = $pageNum;
 
 if($appType != 4){
-    $patientImage = $pdf->ShowPatInfo($patientCode, 45, $username, $appData);
+    $patientImage = $pdf->ShowPatInfo($patientCode, 45, $appointmentID, $appData);
     if($patientImage != null){
-        $pdf->displayImage($username, $patientImage,$leftXaxis,$leftYaxis,$photoSize);
+        $pdf->displayImage($doctorID, $patientImage,$leftXaxis,$leftYaxis,$photoSize);
         $gap = $gap + $photoSize;
     }
 }

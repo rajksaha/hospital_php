@@ -140,6 +140,26 @@ app.controller('PrescribeInvController', function($scope, $http, $modal, $rootSc
             return item;
         }
     };
+    $scope.bringDoctorSetting = function (invCategoryID) {
+
+        var dataString = "query=17" + '&categoryId=' + invCategoryID;
+
+        $http({
+            method: 'POST',
+            url: "phpServices/inv/invService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.invSettingData = result;
+            angular.forEach($scope.invSettingData, function(value, key) {
+                if(parseInt(value.prescribedInvID) > 0){
+                    value.addedToPrescription = true;
+                }else{
+                    value.addedToPrescription = false;
+                }
+            });
+        });
+    };
 	
 	$scope.bringINVDetail = function (){
 

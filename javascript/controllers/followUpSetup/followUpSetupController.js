@@ -112,6 +112,28 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 
 	};
 
+    $scope.managePatientType = function () {
+        var patientTypeList = angular.copy($scope.patientTypeList);
+        var patientTypeData = {};
+        var modalInstance = $modal.open({
+            templateUrl: 'javascript/templates/patient/patientType.html',
+            windowClass: 'fade in',
+            size: 'sm',
+            controller: 'PatientTypeController',
+            resolve: {
+                record: function () {
+                    return {
+                        patientTypeList
+                    };
+                }
+            },
+            backdrop: 'static'
+        });
+        modalInstance.result.then(function(result) {
+            $scope.getPatientType();
+        });
+    };
+
 	$scope.inIt();
 
 	

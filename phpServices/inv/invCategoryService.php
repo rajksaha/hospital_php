@@ -20,7 +20,7 @@ if($query_no== 0){
 
     $sql = "SELECT i.`id` , i.`name`
 			FROM `inv` i
-			WHERE i.`name` LIKE '" . $queryString . "%' LIMIT 10";
+			WHERE i.`name` LIKE '" . $queryString . "%' ORDER BY i.`name` LIMIT 10";
 
     $result=mysql_query($sql);
     $data = array();

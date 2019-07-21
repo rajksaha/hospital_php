@@ -103,7 +103,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 	$scope.refDoc = {};
 
     $scope.getClinicalNote = function(term) {
-        var dataString = 'query=21'+ '&detail=' + term;
+        var dataString = 'query=22'+ '&detail=' + term;
         return $http({
             method: 'POST',
             url: "phpServices/prescription/prescriptionHelperService.php",
@@ -244,7 +244,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
         	$scope.doctorData = result;
         	if($scope.doctorData.patientType == 1){
         		
-        		var dataString = "query=2" + "&doctorType=" + $scope.doctorData.category;
+        		dataString = "query=2" + "&doctorType=" + $scope.doctorData.category;
 
                 $http({
                     method: 'POST',
@@ -253,12 +253,10 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (result) {
                 	$scope.patientTypeList = result;
+                    $scope.bringPatientInfo();
                 });
-        	}
-        	
-        	if($scope.doctorData.patientState== 1){
-        		
-        		var dataString = "query=5";
+
+                dataString = "query=5";
 
                 $http({
                     method: 'POST',
@@ -266,10 +264,10 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
                     data: dataString,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (result) {
-                	$scope.patientStateList = result;
+                    $scope.patientStateList = result;
+
                 });
         	}
-        	
         });
     };
 
@@ -293,12 +291,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
     
     $scope.changePatientType = function(patientType){
 
-        var req = "CREATE";
-        if($scope.patientData.type){
-            req= "UPDATE";
-        }
-    	
-    	var dataString = "query=3" + "&patientType=" + patientType.id + "&req=" + req + "&patientID=" + $scope.patientData.patientID;
+    	var dataString = "query=3" + "&patientType=" + patientType.id + "&patientID=" + $scope.patientData.patientID;
 
         $http({
             method: 'POST',
@@ -390,7 +383,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
     };
 
     $scope.bringDietInfo = function (appointmentID) {
-        var dataString = "query=12" + '&appointmentID=' + appointmentID + '&contentType=' + 'DIET';
+        var dataString = "query=11" + '&appointmentID=' + appointmentID + '&contentType=' + 'DIET';
         $http({
             method: 'POST',
             url: "phpServices/commonServices/prescriptionDetailService.php",
@@ -482,7 +475,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-            $scope.bringClinicalRecord(appointmentID);
+            $scope.bringPrescribedDrugHistory($scope.appoinmentData.appointmentID);
         });
         
     };
@@ -497,7 +490,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-            $scope.bringPrescribedDrugHistory($scope.appoinmentData.appointmentID);
+            $scope.bringClinicalRecord($scope.appoinmentData.appointmentID);
         });
 
     };
@@ -978,7 +971,10 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             backdrop: 'static'
         });
         modalInstance.result.then(function(result) {
-            $scope.bringPrescribedHistory($scope.appoinmentData.appointmentID);
+            $scope.bringPrescribedHistory($scope.appoinmentData.appointmentID, $scope.appoinmentData.patientID);
+            $scope.bringPrescribedPastHistory($scope.appoinmentData.appointmentID);
+            $scope.bringPrescribedFamilyHistory($scope.appoinmentData.appointmentID);
+            $scope.bringPrescribedDrugHistory($scope.appoinmentData.appointmentID);
         });
     };
 
@@ -1208,32 +1204,10 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
             backdrop: 'static'
         });
         modalInstance.result.then(function(result) {
-            $scope.bringDietInfo();
+            $scope.bringDietInfo($scope.appoinmentData.appointmentID);
         });
     };
 
-    $scope.managePatientType = function () {
-
-        var patientTypeList = angular.copy($scope.patientTypeList);
-        var patientTypeData = {};
-        var modalInstance = $modal.open({
-            templateUrl: 'javascript/templates/patient/patientType.html',
-            windowClass: 'fade in',
-            size: 'sm',
-            controller: 'PatientTypeController',
-            resolve: {
-                record: function () {
-                    return {
-                        patientTypeList
-                    };
-                }
-            },
-            backdrop: 'static'
-        });
-        modalInstance.result.then(function(result) {
-            $scope.patientTypeList = result;
-        });
-    };
     $scope.patientInfoEdit = false;
 
 
@@ -1243,10 +1217,7 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
 
 	$scope.inIt = function (){
 		$scope.bringDoctorInfo();
-		$scope.bringPatientInfo();
 		$scope.bringMenu();
-		
-		
 	};
 
     $scope.inIt();
@@ -1272,6 +1243,10 @@ app.controller('PrescriptionController.UpdatePatientInfoController', function($s
                 '&phone='+ $scope.patientData.phone+
                 '&occupation='+ $scope.patientData.occupation +
                 '&referredBy='+ $scope.patientData.referredBy +
+                '&hospitalName='+ $scope.patientData.hospitalName +
+                '&bedNum='+ $scope.patientData.bedNum +
+                '&wardNum='+ $scope.patientData.wardNum +
+                '&headOfUnit='+ $scope.patientData.headOfUnit +
                 '&id='+ $scope.patientData.patientID +
                 '&query=16';
 

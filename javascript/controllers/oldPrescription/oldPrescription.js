@@ -237,6 +237,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
     $scope.viewPrescription = function (data) {
     	
     	$scope.bringPresCribedDiagnosis(data.appointmentID);
+        $scope.bringDietInfo(data.appointmentID);
     	$scope.bringPresCribedDrugs(data.appointmentID);
     	$scope.bringPrescribedInv(data.appointmentID);
     	$scope.bringPrescribedAdvice(data.appointmentID);
@@ -247,6 +248,22 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 
     	$scope.showPrescriptionView = true;
     	$scope.prescriptionViewDate = data.date;
+    };
+
+    $scope.bringDietInfo = function (appointmentID) {
+        var dataString = "query=11" + '&appointmentID=' + appointmentID + '&contentType=' + 'DIET';
+        $http({
+            method: 'POST',
+            url: "phpServices/commonServices/prescriptionDetailService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.dietData = {};
+            if(result && result.length > 0){
+                $scope.dietData.contentDetailID = result[0].contentDetailID;
+                $scope.dietData.dietName = result[0].detail;
+            }
+        });
     };
 
     $scope.bringPrescribedComment = function (appointmentID){
@@ -307,6 +324,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 
             $scope.addDiagnosisToPrescription();
             $scope.addCommentToPrescription();
+            $scope.addDietToPrescription();
 
 
         }else{
@@ -342,6 +360,22 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
         });
 
     };
+
+    $scope.addDietToPrescription = function () {
+
+        var dataString = "query="+ 4 + '&requestedID=' + $scope.dietData.contentDetailID;
+        $http({
+            method: 'POST',
+            url: "phpServices/oldPrescription/oldPrescription.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            $scope.dietData.addedToPrescription = true;
+        });
+
+    };
+
+
 
 	$scope.inIt = function (){
 		$scope.bringMenu();

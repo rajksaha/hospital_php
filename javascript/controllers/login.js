@@ -50,7 +50,7 @@ app.controller('LoginController', function($scope, $http, $timeout, $location) {
 
 
     $scope.login = function(){
-    	
+
     	if($scope.username == "" && $scope.password == ""){
     		$scope.passwordErr = true;
     		$scope.userNotexist = true;
@@ -74,13 +74,14 @@ app.controller('LoginController', function($scope, $http, $timeout, $location) {
     	}
     	
         var dataString = 'username='+ $scope.username +'&query='+1+'&password='+ $scope.password;
-
+        $("#loader").addClass("loading");
         $http({
             method: 'POST',
             url: "phpServices/login/loginHelper.php",
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
+            $("#loader").removeClass("loading");
         	if(result == -1){
         		$scope.userNotexist = true;
         		$scope.error = true;

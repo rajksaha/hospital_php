@@ -7,6 +7,8 @@ app.controller('ResearchHomeController', function($scope, $http, $modal, $rootSc
             $scope.pageName = "Patient List";
 		}else if(page == 3){
             $scope.pageName = "Next Day's Appointment List";
+        }else if(page == 4){
+            $scope.pageName = "Follow-up Report";
         }
         $scope.detailView = true;
     };

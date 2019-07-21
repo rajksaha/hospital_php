@@ -3,17 +3,6 @@ app.controller('PatientTypeController', function($scope, $http, $modalInstance, 
     $scope.globalAdd = true;
     $scope.doctorTypeId = 1;
 
-
-    /*var dataString = "query=0";
-    $http({
-        method: 'POST',
-        url: "phpServices/patient/patientTypeService.php",
-        data: dataString,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function (result) {
-        $scope.doctorTypeId = result;
-    });*/
-
     if(!$scope.patientTypeList || $scope.patientTypeList.length == 0){
         var emptyData = {};
         emptyData.editMode = true;
@@ -69,6 +58,10 @@ app.controller('PatientTypeController', function($scope, $http, $modalInstance, 
     };
 
     $scope.cancel = function () {
+
+        if(!$scope.globalAdd){
+            $scope.patientTypeList.splice($scope.patientTypeList.length - 1, 1);
+        }
         $modalInstance.close($scope.patientTypeList);
     };
 });

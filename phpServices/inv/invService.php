@@ -23,7 +23,7 @@ if($query_no== 0){
 	
 	$sql = "SELECT i.`id` , i.`name`
 			FROM `inv` i
-			WHERE i.`name` LIKE '" . $queryString . "%' LIMIT 10 ORDER BY `name` ";
+			WHERE i.`name` LIKE '" . $queryString . "%' ORDER BY i.`name` LIMIT 10 ";
 
 	$result=mysql_query($sql);
 	$data = array();
@@ -199,6 +199,27 @@ if($query_no== 0){
         $name = $item['name'];
         mysql_query("UPDATE `inv` SET `categoryID`= $categoryID, `name` = '$name' WHERE id = $id");
     }
+
+}else if ($query_no == 17){
+
+    $categoryId = $_POST['categoryId'];
+
+    $sql = "SELECT i.`id` , i.`name` , IFNULL( ip.id, 0 ) AS prescribedInvID, dis.id AS invSettingID, ip.id AS invPresID, i.categoryID,  dis.displayOrder
+			FROM `inv` i
+			JOIN doctor_inv_setteing dis ON i.id = dis.invID
+			LEFT JOIN inv_category ic ON ic.invCategoryID = i.categoryID AND i.categoryID = $categoryId
+			LEFT JOIN inv_prescription ip ON dis.invID = ip.invID  AND ip.appointMentID = '$appointmentID'
+			AND IFNULL( dis.id, 0 )
+			WHERE dis.doctorID = '$doctorID' ORDER BY `name` ";
+
+    $result=mysql_query($sql);
+    $data = array();
+    while ($row=mysql_fetch_array($result)){
+        array_push($data,$row);
+    }
+
+    echo json_encode($data);
+
 
 }
 

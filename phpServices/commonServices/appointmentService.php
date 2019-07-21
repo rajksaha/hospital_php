@@ -6,24 +6,27 @@ if (!isset($_SESSION['username'])) {
 }
 
 
-function getAppointmentByDateRange($username, $filteredDate, $endDate){
+function getAppointmentByDateRange($doctorId, $filteredDate, $endDate){
 	$sql = "SELECT
 			app.appointmentID, app.doctorCode, app.patientCode, app.date, app.time, app.status, app.addedBy, p.patientCode, p.name, p.age, p.address, p.phone, p.sex, IFNULL(p.name, 0) AS patientState, 
 				app.appointmentType, at.shortName AS appointmentTypeName, pt.typeName,  ds.name diseaseName
 			FROM `appointment` app
 			JOIN appointment_type at ON at.id= app.appointmentType
+			JOIN `doctor` doc ON doc.doctorCode = app.doctorCode
 			LEFT JOIN patient p ON app.patientCode = p.patientCode
 			left join patient_detail pd on pd.patientID=p.patientID
 			left join patient_type pt on pt.id=pd.`type`
 			left join diagnosis d on d.appointMentID=app.appointmentID
 			left join disease ds on d.diseaseID = ds.id		
-	WHERE app.doctorCode = '$username' AND app.date >= '$filteredDate'  AND app.date <= '$endDate'  group by app.patientCode order by app.appointmentID DESC";	
+	WHERE doc.doctorID = $doctorId AND app.date >= '$filteredDate'  AND app.date <= '$endDate'  group by app.patientCode order by app.appointmentID DESC";
 	
 	$result=mysql_query($sql);	
 	$data = array();
 	while ($row=mysql_fetch_array($result)){
-		$total_visit_sql = "select  count(app.appointmentID) from  `appointment` app 
-							where  app.doctorCode =  '$username'   and patientCode='".$row['patientCode']."'  and app.appointmentType >0  ";
+		$total_visit_sql = "select  count(app.appointmentID) 
+                            from  `appointment` app 
+                            JOIN `doctor` doc ON doc.doctorCode = app.doctorCode
+							where  doc.doctorID = $doctorId   and patientCode='".$row['patientCode']."'  and app.appointmentType >0  ";
 		$visit_result=mysql_fetch_row(mysql_query($total_visit_sql));	
 		$row['total_visit']=$visit_result[0];
 		array_push($data,$row);
@@ -330,7 +333,7 @@ function getAppointmentInfo($appointmentID){
 
 function getPatientInformaition($patientCode){
 	
-	$sql = "SELECT p.`patientID` , p.`patientCode` , p.`name` , p.`age` , p.`sex` , p.`address` ,p.`phone`,  p.`referredBy`, p.`occupation`, cd.detail as patientImage, pt.type
+	$sql = "SELECT p.`patientID`, p.`patientCode`, p.`name`, p.`age`, p.`sex`, p.`address`, p.`phone`, p.`occupation`, p.`referredBy`, p.`date`, p.`hospitalName`, p.`bedNum`, p.`wardNum`, p.`headOfUnit`, cd.detail as patientImage, pt.type
 	FROM `patient` p
 	LEFT JOIN contentdetail cd ON cd.contentType = 'PATIENTIMG'  AND cd.entityID = '$patientCode'
 	LEFT JOIN patient_detail pt on pt.patientID = p.patientID

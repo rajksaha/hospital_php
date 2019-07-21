@@ -30,7 +30,7 @@ app.controller('PrescriptionController.PrescribeDietController', function($scope
                 data: dataString,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (result) {
-                $modalInstance.close();
+                $modalInstance.close(true);
 
             });
         }else{

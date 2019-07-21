@@ -12,7 +12,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
 
 
 	
-	  $scope.bringFollowUpChart = function (){
+    $scope.bringFollowUpChart = function (){
 
 
           var dataString = "query=3";
@@ -27,7 +27,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
 
               angular.forEach($scope.patientFollowUpList, function(value, key) {
 
-                  var dataString = "query=2" + "&patientFollowUpID=" + value.patientFollowUpID;
+                  var dataString = "query=2" + "&patientFollowUpID=" + value.followUpSerttingID;
 
                   $http({
                       method: 'POST',
@@ -41,7 +41,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
           });
 	    };
 
-	  $scope.getFollowupResult = function (date, reportList) {
+    $scope.getFollowupResult = function (date, reportList) {
 	      var result = "";
           angular.forEach(reportList, function(value, key) {
               if(value.entryDate == date){
@@ -117,7 +117,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
           var followUp = {};
           followUp.followUpList = [];
           angular.forEach($scope.patientFollowUpList, function(value, key) {
-              var jsonItem = {invName : value.invName, patientFollowUpID : value.patientFollowUpID};
+              var jsonItem = {invName : value.invName, patientFollowUpID : value.followUpSerttingID};
               followUp.followUpList.push(jsonItem);
           });
 

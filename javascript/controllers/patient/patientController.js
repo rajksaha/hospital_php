@@ -25,7 +25,7 @@ app.controller('PatientController', function($scope, $http, $modal, $rootScope, 
 		if(dd<10) 		dd = '0'+dd;
 		if(mm<10)		mm = '0'+mm;
 
-		 $scope.nextDate = yyyy + '-' + mm + '-' + dd;
+        $scope.nextDate = yyyy + '-' + mm + '-' + dd;
         var filteredDate = $filter('date')( $scope.nextDate, "yyyy-MM-dd");		
         var  dataString='filteredDate='+  filteredDate +'&query='+11;
         $http({
@@ -56,8 +56,8 @@ app.controller('PatientController', function($scope, $http, $modal, $rootScope, 
     };
 
 
-    $scope.bringByDisease = function (Disease){
-        var  dataString='filteredDate='+ Disease +'&query='+981;
+    $scope.bringByDisease = function (disease){
+        var  dataString='filteredDate='+ disease +'&query='+981;
         $http({
             method: 'POST',
             url: "phpServices/appointment/appointmentHelper.php",
@@ -69,7 +69,6 @@ app.controller('PatientController', function($scope, $http, $modal, $rootScope, 
 			
 			$scope.patientList = result;
             $scope.numberOfPatient = $scope.patientList.length;
-			
             return limitToFilter($scope.patientCode, 10);
         });
     };
@@ -104,8 +103,8 @@ app.controller('PatientController', function($scope, $http, $modal, $rootScope, 
         // return $scope.products;
     };
 
-    $scope.bringByPatientAddd = function (PCode){
-        var  dataString='filteredDate='+ PCode +'&query='+888;
+    $scope.bringByPatientAddd = function (pCode){
+        var  dataString='filteredDate='+ pCode +'&query='+888;
         $http({
             method: 'POST',
             url: "phpServices/appointment/appointmentHelper.php",

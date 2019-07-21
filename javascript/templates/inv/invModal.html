@@ -33,7 +33,7 @@
 	</section>
 
             <div class="col-sm-12 col-md-12 col-lg-12">
-                <select  class="form-control" id="drugTypeAdder" data-ng-model="invCategoryID" data-ng-options="category.invCategoryID as category.name for category in invCategoryList" >
+                <select  class="form-control" id="drugTypeAdder" data-ng-model="invCategoryID" data-ng-change="bringDoctorSetting(invCategoryID)" data-ng-options="category.invCategoryID as category.name for category in invCategoryList" >
                     <option value="">--Select--</option>
                 </select>
                 <hr>

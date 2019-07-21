@@ -174,6 +174,8 @@ app.controller('AppointmentController', function($scope, $http, $modal, $rootSco
         }).success(function (result) {
         	$scope.appointmentList = result;
         	$scope.numberOfAppointment = $scope.appointmentList.length;
+        }, function(error){
+            $location.path("/login");
         });
     };
     

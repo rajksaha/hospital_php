@@ -172,6 +172,8 @@ function insertSingleInvToSetting ($doctorID, $diseaseID, $invID, $note){
 
 
 	mysql_query("INSERT INTO `settings_inv`(`doctorID`, `diseaseID`, `invID`, `note`, `checked`) VALUES ('$doctorID', '$diseaseID', '$invID', '$note', 0)");
+
+    return mysql_insert_id();
 }
 
 function insertSingleAdviceToSetting ($doctorID, $diseaseID, $adviceID){

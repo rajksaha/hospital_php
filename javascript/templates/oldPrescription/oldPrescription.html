@@ -50,10 +50,16 @@
 				<div class="form-group">
 
 					<div class="well well-sm" style="border-left: 5px solid #3ac0ff;">
+						<button class="btn btn-default" data-ng-model="none"   data-ng-click="addDietToPrescription()" data-ng-if="dietData.dietName">
+							<span class="glyphicon  glyphicon "  data-ng-class="{'glyphicon-check': dietData.addedToPrescription == true,'glyphicon-unchecked': !dietData.addedToPrescription  || dietData.addedToPrescription == false}"></span>
+						</button>
+						<span > <b>Diet:</b> {{dietData.dietName}}</span>
+					</div>
+					<div class="well well-sm" style="border-left: 5px solid #3ac0ff;">
 						<button class="btn btn-default" data-ng-model="none"   data-ng-click="addDiagnosisToPrescription()" data-ng-if="diagnosisData.diseaseName">
 							<span class="glyphicon  glyphicon"  data-ng-class="{'glyphicon-check': diagnosisData.addedToPrescription == true,'glyphicon-unchecked': !diagnosisData.addedToPrescription  || data.addedToPrescription == false}"></span>
 						</button>
-						<span > {{diagnosisData.diseaseName ? diagnosisData.diseaseName : 'Diagnosis'}}</span>
+						<span > <b>Diagnosis:</b> {{diagnosisData.diseaseName}}</span>
 					</div>
 				</div>
 				<div ng-include="'javascript/templates/oldPrescription/drugInfo.html'"></div>

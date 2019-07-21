@@ -24,7 +24,10 @@
                 <td>{{userProfile.fullName}}</td>
                 <td>{{userProfile.username}}</td>
                 <td>{{userProfile.password}}</td>
-                <td>{{userProfile.isActive}}</td>
+                <td>
+                    <i  title="In-active" data-ng-if="userProfile.isActive == 0" class="fa fa-2x fa-toggle-off" aria-hidden="true" data-ng-click="changeUserStatus(userProfile, 1)"></i>
+                    <i  title="Active" data-ng-if="userProfile.isActive == 1"class="fa fa-2x fa-toggle-on" aria-hidden="true" data-ng-click="changeUserStatus(userProfile, 0)"></i>
+                </td>
                 <td>
                     <button title="Edit" data-ng-show="!userProfile.editMode && !userProfile.otherEditMode" class="btn btn-primary btn-sm"
                             data-ng-click="editUser(userProfile)">

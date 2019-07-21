@@ -25,8 +25,10 @@ if($query_no== 0){
 
     $invID = getInvIDByName($invName);
 
-    mysql_query("INSERT INTO `patient_follow_up`( `patientID`, `doctorID`, `invID`) VALUES ($patientID, $doctorID, $invID)");
-
+    $pat = mysql_query("SELECT `id`, `patientID`, `type`, `tri`, `triStatus`, `edb` FROM `patient_detail` WHERE  `patientID` = $patientID");
+    $res = mysql_fetch_assoc($pat);
+    $patientTypeId= $res['type'];
+    $sql = mysql_query("INSERT INTO `doctor_followUp_setteing`( `doctorID`, `patientTypeId`, `invID`) VALUES ('$doctorID', $patientTypeId, '$invID')");
     echo mysql_insert_id();
 }elseif ($query_no == 4){
 
@@ -39,9 +41,10 @@ if($query_no== 0){
         $entryDate = $item['entryDate'];
         $data = $item['data'];
         mysql_query("DELETE FROM follow_up_result where followUpID = $followUpID AND entryDate = '$entryDate'");
-        mysql_query("INSERT INTO `follow_up_result`( `followUpID`, `entryDate`, `data`) VALUES ($followUpID, '$entryDate', '$data')");
+        mysql_query("INSERT INTO `follow_up_result`( `appID`, `followUpID`, `entryDate`, `data`) VALUES ($appointmentID, $followUpID, '$entryDate', '$data')");
+        echo "INSERT INTO `follow_up_result`( `appID`, `followUpID`, `entryDate`, `data`) VALUES ($appointmentID, $followUpID, '$entryDate', '$data')";
     }
-    echo $arr;
+    //echo $arr;
 
 }elseif ($query_no == 2){
     $followUpID = $_POST['patientFollowUpID'];
@@ -57,8 +60,9 @@ if($query_no== 0){
 
     $result = mysql_query("SELECT DISTINCT (fur.`entryDate`)
                             FROM `follow_up_result` fur
-                            JOIN patient_follow_up pfu ON fur.followUpID = pfu.patientFollowUpID
-                            WHERE pfu.patientID = $patientID AND pfu.doctorID = $doctorID ORDER BY entryDate DESC");
+                            JOIN `appointment` app ON fur.appID = app.appointmentID
+                            JOIN `patient` p ON app.patientCode = p.patientCode
+                            WHERE p.patientID = $patientID ORDER BY entryDate DESC");
 
     $data = array();
     while ($row=mysql_fetch_array($result)){
@@ -83,12 +87,13 @@ if($query_no== 0){
 
 
 
-    function getPatientFollowUpSetting($patientID, $doctorID){
+function getPatientFollowUpSetting($patientID, $doctorID){
 	
-	$sql = mysql_query("SELECT pfu.`patientFollowUpID`, pfu.`patientID`, pfu.`doctorID`, pfu.`invID`, i.name AS invName 
-			FROM `patient_follow_up` pfu
-			JOIN inv i ON pfu.invID = i.id
-			WHERE pfu.patientID = $patientID AND pfu.doctorID = $doctorID");
+	$sql = mysql_query("SELECT dfs.`followUpSerttingID`, dfs.`doctorID`, dfs.`patientTypeId`, dfs.`invID`, i.name AS invName
+                FROM `doctor_followup_setteing` dfs 
+                JOIN `patient_detail` pd ON dfs.`patientTypeId` = pd.`type`
+                JOIN inv i ON dfs.invID = i.id
+			    WHERE pd.patientID = $patientID AND dfs.doctorID = $doctorID");
 	
 	$data = array();
 	while ($row=mysql_fetch_array($sql)){

@@ -119,7 +119,6 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                             'javascript/controllers/prescription/prescriptionSettingController.js',
                             'javascript/controllers/prescription/vitalController.js',
                             'javascript/controllers/history/pastHistoryController.js',
-                            'javascript/controllers/patient/patientTypeController.js',
                             'javascript/controllers/advice/advice.js'
                         ]
                     });
@@ -415,6 +414,7 @@ app.config(function( $stateProvider, $urlRouterProvider, $compileProvider, $cont
                             'javascript/controllers/invCategory/invCategoryController.js',
                             'javascript/controllers/drugAdvisor/drugAdvisorController.js',
                             'javascript/controllers/followUpSetup/followUpSetupController.js',
+                            'javascript/controllers/patient/patientTypeController.js',
 							'javascript/controllers/symptom/symptomModificationController.js',
                             'javascript/controllers/admin/adminModuleController.js',
 							'javascript/controllers/disease/diseaseModificationController.js'
