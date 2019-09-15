@@ -192,7 +192,7 @@ else if($query_no==4){
 	
 	$drugID = $_POST['drugID'];
 	
-	$sql = mysql_query("SELECT `doctorDrugID`, d.`doctorID`, `drugID`, `drugTimeID`, `drugDoseUnit`, `drugWhenID`, `drugAdviceID` 
+	$sql = mysql_query("SELECT `doctorDrugID`, `doctorID`, `drugID`, `drugTimeID`, `drugDoseUnit`, `drugWhenID`, `drugAdviceID` 
 				FROM `doctor_drug` dd
 				WHERE dd.doctorID = $doctorID AND dd.drugID = $drugID");
 	

@@ -72,9 +72,9 @@
 
                                 </a>
                             </h2>
-                            <div data-ng-repeat="patientType in patientTypeList" data-ng-if="showPatientType">
-                                <div class="radio-s">
-                                    <input id="p2-{{patientType.id}}" type="radio" name="pp2_1" data-ng-model="patientType.id" data-ng-checked="patientData.type == patientType.id" data-ng-click="changePatientType(patientType)">
+                            <div data-ng-repeat="patientType in patientTypeList" data-ng-show="showPatientType">
+                                <div class="checkbox-s">
+                                    <input id="p2-{{patientType.id}}" type="checkbox" name="pp2_1" data-ng-model="patientData.type" data-ng-checked="patientData.type == patientType.id" data-ng-click="changePatientType(patientType)">
                                     <label for="p2-{{patientType.id}}">{{patientType.typeName}}</label>
                                 </div>
                             </div>

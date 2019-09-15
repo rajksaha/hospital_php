@@ -288,8 +288,18 @@ app.controller('PrescriptionController', function($scope, $http, $modal, $rootSc
         }
     };
 
+    $scope.checkPatientType = function (type, id) {
+
+        if(type == id){
+            return true;
+        }else{
+            return false;
+        }
+    };
+
     
     $scope.changePatientType = function(patientType){
+
 
     	var dataString = "query=3" + "&patientType=" + patientType.id + "&patientID=" + $scope.patientData.patientID;
 
