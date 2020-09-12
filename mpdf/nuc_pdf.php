@@ -10,19 +10,122 @@ include('../phpServices/commonServices/appointmentService.php');
 include('../phpServices/commonServices/prescriptionService.php');
 
 class PDF extends mPDF {
-	
-		public function Header()
-{
-    $this->Image('doc.png',20,5,170,40,'GIF','',true, false);
-	$this->Image('images (1).png',30,66,60,13,'png','',true, false);
-}
 
-function Footer() {
-	$this -> image ('doc1.png',30,260,150,30,'png','',true, false);
-	
-	
-	
-}
+    public function Header()
+    {
+        //$this->Image('doc.png',15,5,170,40,'GIF','',true, false);
+        $this->Image('images.png',15,75,50,8,'png','',true, false);
+    }
+
+    function Footer() {
+        //$this -> image ('doc1.png',30,260,150,30,'png','',true, false);
+
+
+
+    }
+
+    function showDocInfo($username, $yAxis, $size){
+
+        $resultData = getDoctorInfo($username);
+
+
+
+        if($resultData['prescriptionStyle'] == 2){
+
+
+
+
+
+
+            $size =$size;
+            $yAxis = $yAxis + 10;
+            $this->SetXY(85, 250);
+            $this->SetFont('nikosh','',$size + 1);
+            $this->MultiCell(50,4, "জরুরী যোগাযোগ - ০১৬৭৫ ৬১৪ ৫৯২ সকাল ১০টা থেকে দুপুর ১ টা এবং বিকাল ৫টা থেকে রাত ৮টা ", 0);
+
+
+
+
+        }
+
+    }
+
+    function ShowPatInfo($patientCode,$yAxis, $appointmentID){
+
+        $resultData = getPatientInformaition($patientCode);
+
+
+
+        $weight = 0;
+
+        $vitalResultData = getPrescribedVital($appointmentID);
+
+        while($row=  mysql_fetch_array($vitalResultData)){
+
+
+            $vitalID = $row['vitalID'];
+
+            if($vitalID == 81){
+                $vitalResult = $row['vitalResult'];
+                //$vitalDisplayName = $row['vitalDisplayName'];
+                $weight = $vitalResult;
+            }
+
+        }
+
+        $rec = mysql_fetch_assoc($resultData);
+
+        $patientCode = $rec['patientCode'];
+
+        $patientCode = substr($patientCode, - 10);
+
+        $this->SetFont('nikosh','',9);
+
+        $name = $rec['name'];
+
+        $age = $rec['age'];
+
+        $sex = $rec['sex'];
+
+        $address = $rec['address'];
+
+        $phone = $rec['phone'];
+
+        $date = date('d M Y');
+
+
+        $this->SetXY(110,$yAxis + 20);
+        $this->MultiCell(65,5, "ID No: $patientCode");
+
+
+        $this->SetXY(15,$yAxis + 20);
+        $this->MultiCell(65,5, "$name");
+
+        $this->SetXY(15, $yAxis - 8);
+        //$this->MultiCell(65, 5, "$phone");
+
+        $this->SetXY(95, $yAxis + 20);
+        $this->MultiCell(50, 5, "$age Yrs");
+
+
+        $this->SetXY(130, $yAxis);
+        //$this->MultiCell(30, 5, "$sex");
+
+        $this->SetXY(165, $yAxis + 20);
+        $this->MultiCell(80,5, "$date");
+
+
+        $this->SetXY(100, $yAxis + 5);
+        //$this->MultiCell(50, 5, "$address");
+
+
+
+
+        return $rec['patientImage'];
+
+    }
+
+
 
     function show_med($appointmentID, $xAxis, $yAxis, $size, $pageNum,$pdf){
 
@@ -80,27 +183,27 @@ function Footer() {
             }else{
                 $printItem = "$printItem" . "$var. $drugType.  $drugName - $drugStr";
             }
-            
-			$var = $var + 1;
 
-            
-		
-		if($drugDoseInitial != ""){
-			if($drugTypeID == 3 || $drugTypeID == 15 || $drugTypeID == 41){
-				$drugDoseInitial = str_replace("s","চা চামচ", $drugDoseInitial);
-			}else if($drugTypeID == 4){
-				$drugDoseInitial = str_replace("ampl","এম্পল", $drugDoseInitial);
-				$drugDoseInitial = str_replace("vial","ভায়াল", $drugDoseInitial);
-			}else if($drugTypeID == 10 || $drugTypeID == 14 || $drugTypeID == 21){
-				$drugDoseInitial = str_replace("puff","চাপ", $drugDoseInitial);
-			}else if($drugTypeID == 7){
-				$drugDoseInitial = str_replace("d","ড্রপ", $drugDoseInitial);
-			}else if($drugTypeID == 6){
-				$drugDoseInitial = str_replace("u","(+/-) 2 ইউনিট", $drugDoseInitial);
-			}else if($drugTypeID == 11){
-				$drugDoseInitial = str_replace("drp/min","দ্রপ/মিনিট", $drugDoseInitial);	
-			}
-		}
+            $var = $var + 1;
+
+
+
+            if($drugDoseInitial != ""){
+                if($drugTypeID == 3 || $drugTypeID == 15 || $drugTypeID == 41){
+                    $drugDoseInitial = str_replace("s","চা চামচ", $drugDoseInitial);
+                }else if($drugTypeID == 4){
+                    $drugDoseInitial = str_replace("ampl","এম্পল", $drugDoseInitial);
+                    $drugDoseInitial = str_replace("vial","ভায়াল", $drugDoseInitial);
+                }else if($drugTypeID == 10 || $drugTypeID == 14 || $drugTypeID == 21){
+                    $drugDoseInitial = str_replace("puff","চাপ", $drugDoseInitial);
+                }else if($drugTypeID == 7){
+                    $drugDoseInitial = str_replace("d","ড্রপ", $drugDoseInitial);
+                }else if($drugTypeID == 6){
+                    $drugDoseInitial = str_replace("u","(+/-) 2 ইউনিট", $drugDoseInitial);
+                }else if($drugTypeID == 11){
+                    $drugDoseInitial = str_replace("drp/min","দ্রপ/মিনিট", $drugDoseInitial);
+                }
+            }
 
             $doseData = getPreiodicListforPdf($drugPrescribeID);
 
@@ -189,89 +292,17 @@ function Footer() {
 
             $full_str = $this->convertNumberToBangla($full_str);
 
-            $this->MultiCell(150,5,"$printItem   - - -   $full_str");
+            $this->MultiCell(175,5,"$printItem   - - -   $full_str");
             //$yAxis += 8;
         }
 
         return $this->GetY()- 5;
 
     }
-	
-function ShowPatInfo($patientCode,$yAxis, $appointmentID){
-
-        $resultData = getPatientInformaition($patientCode);
 
 
 
-        $weight = 0;
-
-        $vitalResultData = getPrescribedVital($appointmentID);
-
-        while($row=  mysql_fetch_array($vitalResultData)){
-
-
-            $vitalID = $row['vitalID'];
-
-            if($vitalID == 81){
-                $vitalResult = $row['vitalResult'];
-                //$vitalDisplayName = $row['vitalDisplayName'];
-                $weight = $vitalResult;
-            }
-
-        }
-
-        $rec = mysql_fetch_assoc($resultData);
-
-        $patientCode = $rec['patientCode'];
-		
-		$this->SetFont('Times','',11);
-
-        $patientCode = substr($patientCode, - 10);
-
-        $name = $rec['name'];
-
-        $age = $rec['age'];
-
-        $sex = $rec['sex'];
-
-        $address = $rec['address'];
-
-        $phone = $rec['phone'];
-
-        $date = date('D d M Y');
-
-        $this->SetXY(110,$yAxis + 11);
-        $this->MultiCell(65,5, "ID No: $patientCode");
-
-
-        $this->SetXY(30,$yAxis + 11);
-        $this->MultiCell(65,5, "$name");
-
-        $this->SetXY(15, $yAxis - 8);
-        //$this->MultiCell(65, 5, "$phone");
-
-        $this->SetXY(90, $yAxis + 11);
-        $this->MultiCell(50, 5, "$age Yrs");
-
-
-        $this->SetXY(130, $yAxis + 5);
-        //$this->MultiCell(30, 5, "$sex");
-
-        $this->SetXY(150, $yAxis + 11);
-        $this->MultiCell(50,5, "$date");
-
-
-        $this->SetXY(100, $yAxis + 5);
-        //$this->MultiCell(50, 5, "$address");
-
-
-
-
-        return $rec['patientImage'];
-
-    }
-	
-	    function showComment($appointmentID,$xAxis,$yAxis, $maxX, $size){
+    function showComment($appointmentID,$xAxis,$yAxis, $maxX, $size){
 
         $contentData = getContentDetail($appointmentID, "COMMENT");
 
@@ -289,7 +320,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
 
         return $this->GetY()- 5;
     }
-	
+
     function show_Complain($appointmentID,$xAxis,$yAxis, $maxX , $size) {
 
         $resultData = getPrescribedComplain($appointmentID);
@@ -300,7 +331,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
         if(mysql_num_rows($resultData) > 0){
             $this->SetFont('Times','B',$size);
             $this->SetXY($xAxis, $yAxis);
-            $this->MultiCell($maxX,5,"Chief Complaints");
+            $this->MultiCell($maxX,10,"Chief Complaints");
             $yAxis += 6;
 
         }if(mysql_num_rows($resultData) == 0){
@@ -358,7 +389,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
 
             $vitalResult = $row['vitalResult'];
             $vitalDisplayName = $row['vitalDisplayName'];
-            $printItem = "$printItem" .  "$vitalDisplayName: $vitalResult,";
+            $printItem = "$printItem" .  " $vitalDisplayName: $vitalResult,";
         }
 
         $yAxis =  $this->GetY();
@@ -449,7 +480,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
             $yAxis =  $this->GetY();
             $yAxis = $this->checkForPageChange($yAxis, $this->page);
             $this->SetXY($xAxis, $yAxis);
-            $this->MultiCell(80,5,"$historylDisplayName:  $historyResult");
+            $this->MultiCell($maxX,5,"$historylDisplayName:  $historyResult");
 
         }
 
@@ -511,8 +542,8 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
         $this->MultiCell($maxX,5,rtrim($printItem,", "));
         return $this->GetY()- 5;
     }
-	
-	    function show_diagnosis($appointmentID,$xAxis,$yAxis, $size ){
+
+    function show_diagnosis($appointmentID,$xAxis,$yAxis, $size ){
 
         $resultData = getPrescribedDiagnosis($appointmentID);
 
@@ -533,8 +564,8 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
         return $this->GetY()- 5;
 
     }
-	
-	    function show_ref_doc($appointmentID,$xAxis,$yAxis,$size){
+
+    function show_ref_doc($appointmentID,$xAxis,$yAxis,$size){
 
         $this->SetFont('nikosh','',$size);
 
@@ -544,7 +575,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
 
         if($rec['doctorName'] != ""){
             $this->SetXY($xAxis, $yAxis);
-            $this->MultiCell(160,5, "Refd. to: " . $rec['doctorName']);
+            $this->MultiCell(160,5, "REFD. TO: " . $rec['doctorName']);
             $yAxis =  $this->GetY();
             $this->SetXY($xAxis, $yAxis);
             $this->MultiCell(160,5, $rec['doctorAdress']);
@@ -553,10 +584,10 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
         return $this->GetY();
 
     }
-	
-	
-	
-	    function show_nextVisit($appointmentID,$xAxis,$yAxis,$size){
+
+
+
+    function show_nextVisit($appointmentID,$xAxis,$yAxis,$size){
 
 
         $resultData = getPrescribedNextVisit($appointmentID);
@@ -595,7 +626,7 @@ function ShowPatInfo($patientCode,$yAxis, $appointmentID){
         return $this->GetY();
 
     }
-	
+
     function show_advice($appointmentID,$xAxis,$yAxis,$size,$maxX){
         $resultData = getPrescribedAdvice($appointmentID);
         if(mysql_num_rows($resultData) > 0){
@@ -664,19 +695,19 @@ $appData = mysql_fetch_assoc($res);
 $appType = $appData['appointmentType'];
 
 $lineStyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(255, 0, 0));
-$pdf->Line(30, 55, 183, 55, $linestyle);
-$pdf->Line(30, 63, 183, 63, $linestyle);
+$pdf->Line(15, 70, 190, 70, $linestyle);
+//$pdf->Line(10, 235, 95, 235, $linestyle);
 //$pdf->Line(30, 263, 183, 263, $linestyle);
 //$pdf->Line(30 , 55, 30, 263, $lineStyle);
 //$pdf->Line(183 , 55, 183, 263, $lineStyle);
 $leftYaxis = 80;
 $rightYaxis = 80;
-$size = 11;
+$size = 8;
 
-$leftXaxis = 30;
+$leftXaxis = 15;
 $rightXaxis = 90;
-$maxX = 150;
-$maxXForRight = 150;
+$maxX = 175;
+$maxXForRight = 175;
 
 $gap = 5;
 $photoSize = 5;
@@ -695,11 +726,11 @@ $pdf->page = $pageNum;
 
 if($appType != 4){
     $patientImage = $pdf->ShowPatInfo($patientCode, 45, $username);
-	
+
     if($patientImage != null){
         $pdf->displayImage($username, $patientImage,$leftXaxis,$leftYaxis,$photoSize);
         $gap = $gap + $photoSize;
-		
+
     }
 }
 
@@ -735,13 +766,13 @@ $leftYaxis = $pdf->checkForPageChange($leftYaxis, $pdf->page);
 $leftYaxis=$pdf->show_inv($appointmentID,$leftXaxis,$leftYaxis + 5 , $maxX , $size);
 $leftYaxis = $pdf->checkForPageChange($leftYaxis, $pdf->page);
 
-$leftYaxis=$pdf-> show_advice($appointmentID,$leftXaxis,$leftYaxis + 5,$size , $maxX);
+$leftYaxis=$pdf-> show_advice($appointmentID,$leftXaxis,$leftYaxis + 5,$size + 2, $maxX);
 $leftYaxis = $pdf->checkForPageChange($leftYaxis, $pdf->page);
 
 $leftYaxis=$pdf-> show_nextVisit($appointmentID,$leftXaxis,$leftYaxis + 5,$size);
 $leftYaxis = $pdf->checkForPageChange($leftYaxis, $pdf->page);
 
-$leftYaxis=$pdf-> show_ref_doc($appointmentID,$leftXaxis,$leftYaxis + 5,$size);
+$leftYaxis=$pdf-> show_ref_doc($appointmentID,$leftXaxis,$leftYaxis + 2,$size);
 $leftYaxis = $pdf->checkForPageChange($leftYaxis, $pdf->page);
 
 
@@ -752,7 +783,7 @@ if($yPageNo > $pdf->page){
 
 //$pdf-> show_diagnosis($appointmentID,15,55,$size);
 //$pdf-> show_ref_doc($appointmentID,15,260,$size);
-//$pdf->showDocInfo($username, 15, $size + 2);
+$pdf->showDocInfo($username, 5, $size + 2);
 
 $pdf->Output('');
 exit;

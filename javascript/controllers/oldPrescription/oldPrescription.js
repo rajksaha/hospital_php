@@ -127,7 +127,8 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 	$scope.prescribedComplainData = [];
 	
 	$scope.bringPrescribedComplain = function(appointmentID){
-		
+
+        $scope.prescribedComplainData = [];
 		var dataString = "query=4" + '&appointmentID=' + appointmentID;
 
         $http({
@@ -144,7 +145,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 	$scope.prescribedMHData = [];
 	
 	$scope.bringPrescribedMH = function(appointmentID, patientID){
-		
+        $scope.prescribedMHData = [];
 		var dataString = "query=5" + '&typeCode=MH' + '&appointmentID=' + appointmentID + '&patientID=' + patientID;
 
         $http({
@@ -161,7 +162,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 	$scope.prescribedOBSData = [];
 	
 	$scope.bringPrescribedOBS = function(appointmentID, patientID){
-		
+        $scope.prescribedOBSData = [];
 		var dataString = "query=5" + '&typeCode=OBS' + '&appointmentID=' + appointmentID + '&patientID=' + patientID;
 
         $http({
@@ -178,7 +179,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
 	$scope.diagnosisData = {};
 	
 	$scope.bringPresCribedDiagnosis = function (appointmentID){
-		
+        $scope.diagnosisData = {};
 		var dataString = "query=6" + '&appointmentID=' + appointmentID;
 
         $http({
@@ -245,6 +246,7 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
     	$scope.bringPrescribedComplain(data.appointmentID);
     	$scope.bringPrescribedHistory(data.appointmentID, data.patientID);
         $scope.bringPrescribedComment(data.appointmentID);
+        $scope.bringPrescribedFollowUp(data.appointmentID);
 
     	$scope.showPrescriptionView = true;
     	$scope.prescriptionViewDate = data.date;
@@ -262,6 +264,9 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
             if(result && result.length > 0){
                 $scope.dietData.contentDetailID = result[0].contentDetailID;
                 $scope.dietData.dietName = result[0].detail;
+            }else{
+                $scope.dietData.contentDetailID = null;
+                $scope.dietData.dietName = null;
             }
         });
     };
@@ -278,6 +283,26 @@ app.controller('OldPrescriptionController', function($scope, $http, $modal, $roo
         }).success(function (result) {
             if(result && result.length > 0){
                 $scope.commentData= result[0];
+            }else{
+                $scope.commentData= {};
+            }
+        });
+    };
+
+    $scope.bringPrescribedFollowUp = function (appointmentID){
+
+        var dataString = "query=11" + '&appointmentID=' + appointmentID + '&contentType=' + 'CLINICAL_RECORD';
+
+        $http({
+            method: 'POST',
+            url: "phpServices/commonServices/prescriptionDetailService.php",
+            data: dataString,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (result) {
+            if(result && result.length > 0){
+                $scope.followUpDataList= result;
+            }else{
+                $scope.followUpDataList= [];
             }
         });
     };

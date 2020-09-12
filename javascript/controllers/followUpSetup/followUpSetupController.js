@@ -11,6 +11,7 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 	$scope.patientAppoinmentList = [];
 	$scope.patientTypeId = null;
     $scope.followUpInvName = "";
+    $scope.doctorTypeId = null;
 	
 	$scope.typeHeadSelected = false;
 	
@@ -34,10 +35,10 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 
     $scope.getPatientType = function () {
 
-        var dataString = "query=2" + "&doctorType=" + 1;
+        var dataString = "query=6" + "&doctorType=" + $scope.doctorTypeId;
         $http({
             method: 'POST',
-            url: "phpServices/prescription/prescriptionHelperService.php",
+            url: "phpServices/patient/patientTypeService.php",
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
@@ -100,20 +101,36 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
 	  
 	  
 	$scope.inIt = function (){
-        var dataString = "query=2" + "&doctorType=" + 1;
+
+        var dataString = "query=5";
         $http({
             method: 'POST',
-            url: "phpServices/prescription/prescriptionHelperService.php",
+            url: "phpServices/patient/patientTypeService.php",
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-            $scope.patientTypeList = result;
+            $scope.doctorTypeId = result;
+
+            var dataString = "query=4" + "&doctorType=" + $scope.doctorTypeId;
+            $http({
+                method: 'POST',
+                url: "phpServices/patient/patientTypeService.php",
+                data: dataString,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (result) {
+                $scope.patientTypeList = result;
+            });
         });
+
+
+
 
 	};
 
     $scope.managePatientType = function () {
-        var patientTypeList = angular.copy($scope.patientTypeList);
+        var data = {};
+        data.patientTypeList = angular.copy($scope.patientTypeList);
+        data.doctorTypeId = $scope.doctorTypeId;
         var patientTypeData = {};
         var modalInstance = $modal.open({
             templateUrl: 'javascript/templates/patient/patientType.html',
@@ -123,7 +140,7 @@ app.controller('FollowUpSetupController', function($scope, $http, $modal, $rootS
             resolve: {
                 record: function () {
                     return {
-                        patientTypeList
+                        data
                     };
                 }
             },

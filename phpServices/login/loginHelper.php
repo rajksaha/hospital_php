@@ -1,4 +1,4 @@
-<?php
+    <?php
 include('../config.inc');
 session_start();
      $username=mysql_real_escape_String($_POST['username']);
@@ -39,7 +39,7 @@ $sql=mysql_query("SELECT * FROM `user_profile` WHERE `username` ='$username'");
 function backUpData($doctorID){
     $tables = array();
 
-    $con = mysqli_connect('localhost', 'root', 'pass', 'arefin_db');
+    $con = mysqli_connect('localhost', 'root', 'pass', 'doctorplatform');
 
     $result = mysqli_query($con, "SHOW TABLES");
     while ($row = mysqli_fetch_row($result)) {

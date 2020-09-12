@@ -49,7 +49,7 @@
 				 <div class="panel-body">
 					<div class="room-desc">
 						 <span  class="col-lg-2" ><label for="inputName"> Name</label></span></span>
-						 <span  class="col-lg-7" ><input type="text" data-ng-model="patientName" typeahead="patients.name for patients in getPatients($viewValue)"  class="form-control" placeholder="Search Patients By Name" typeahead-on-select='onSelectNamePatient($item, $model, $label)'/></span>
+						 <span  class="col-lg-7" ><input type="text" data-ng-model="patientName" typeahead="patients.name + ' (' + patients.patientCode + ')' for patients in getPatients($viewValue)"  class="form-control" placeholder="Search Patients By Name" typeahead-on-select='onSelectNamePatient($item, $model, $label)'/></span>
 						 <span  class="col-lg-3" ><button class="btn btn-primary pull-right" data-ng-click="addAppFollowUP()" data-ng-show="addByName"><span class='glyphicon glyphicon glyphicon-plus' aria-hidden='true'></span> Add</button></span>
 					</div>
 				 </div>

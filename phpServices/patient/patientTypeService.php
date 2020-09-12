@@ -34,5 +34,44 @@ if($query_no== 0){
 }elseif ($query_no == 3){
     $id = $_POST['id'];
     mysql_query("DELETE FROM `patient_type` WHERE  `id` = $id");
-}
+}if($query_no==4){
+       	$doctorType = $_POST['doctorType'];
+       	$sql = "SELECT `id`, `doctorType`, `typeName` FROM `patient_type` WHERE doctorType = '$doctorType'";
+       	$result=mysql_query($sql);
+
+       	$data = array();
+       	while ($row=mysql_fetch_array($result)){
+       		array_push($data,$row);
+       	}
+
+       	echo json_encode($data);
+
+
+}if($query_no==5){
+
+      $result = mysql_query("SELECT ds.`category`
+  				FROM `doctor` d
+  				JOIN  doctorsettings ds ON d.doctorID = ds.doctorID
+  				WHERE d.`doctorID` = '$doctorID'");
+
+  	$rec = mysql_fetch_assoc($result);
+   	$doctorType = $rec['category'];
+
+   	echo $doctorType;
+   }
+   if($query_no==6){
+
+   	$doctorType = $_POST['doctorType'];
+   	$sql = "SELECT `id`, `doctorType`, `typeName` FROM `patient_type` WHERE doctorType = '$doctorType'";
+   	$result=mysql_query($sql);
+
+   	$data = array();
+   	while ($row=mysql_fetch_array($result)){
+   		array_push($data,$row);
+   	}
+
+   	echo json_encode($data);
+
+
+   }
 ?>

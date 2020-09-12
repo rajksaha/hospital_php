@@ -1,7 +1,7 @@
 app.controller('PatientTypeController', function($scope, $http, $modalInstance, limitToFilter, $filter, record) {
-    $scope.patientTypeList = record.patientTypeList;
+    $scope.patientTypeList = record.data.patientTypeList;
     $scope.globalAdd = true;
-    $scope.doctorTypeId = 1;
+    $scope.doctorTypeId = record.data.doctorTypeId;
 
     if(!$scope.patientTypeList || $scope.patientTypeList.length == 0){
         var emptyData = {};

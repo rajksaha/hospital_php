@@ -51,8 +51,8 @@
 		                 <div class="panel-body">
 		                 	<div class="text-muted form-group">By Name</div>	                    
 		                    <div class="room-desc">	
-		                         <label for="inputName"> Name</label>
-		                         <input type="text" data-ng-model="patientName" typeahead="patients.name for patients in getPatients($viewValue)"  class="form-control" placeholder="Search Patients" typeahead-on-select='onSelectNamePatient($item, $model, $label)'/>
+		                         <label for="inputName"> Name hello</label>
+		                         <input type="text" data-ng-model="patientName" typeahead="patients.name + ' (' + patients.patientCode + ')' for patients in getPatients($viewValue)"  class="form-control" placeholder="Search Patients" typeahead-on-select='onSelectNamePatient($item, $model, $label)'/>
 		                    </div>
 		                    <button class="btn btn-primary pull-right" data-ng-click="addAppFollowUP()" data-ng-show="addByName"><span class='glyphicon glyphicon glyphicon-plus' aria-hidden='true'></span> Add</button>
 		                 </div>

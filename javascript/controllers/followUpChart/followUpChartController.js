@@ -25,49 +25,55 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
           }).success(function (result) {
               $scope.uniqueDateList = result;
 
-              angular.forEach($scope.patientFollowUpList, function(value, key) {
+              angular.forEach($scope.uniqueDateList, function(uniqueApp, key) {
+                  uniqueApp.followUpDataList = [];
+                  var filteredDate = $filter('date')(uniqueApp.entryDate, "yyyy-MM-dd");
+                  angular.forEach($scope.patientFollowUpList, function(value, key) {
+                      var dataString = "query=2" +
+                          "&patientFollowUpID=" + value.followUpSerttingID +
+                          "&appID=" + uniqueApp.appID +
+                          "&invID=" + value.invID +
+                            "&entryDate=" + filteredDate;
 
-                  var dataString = "query=2" + "&patientFollowUpID=" + value.followUpSerttingID;
-
-                  $http({
-                      method: 'POST',
-                      url: "phpServices/followUpChart/followUpChart.php",
-                      data: dataString,
-                      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                  }).success(function (result) {
-                      value.invReportList = result;
+                      $http({
+                          method: 'POST',
+                          url: "phpServices/followUpChart/followUpChart.php",
+                          data: dataString,
+                          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                      }).success(function (result) {
+                          if(result && result.length > 0){
+                              uniqueApp.followUpDataList.push(result[0]);
+                          }
+                      });
                   });
               });
           });
 	    };
 
     $scope.getFollowupResult = function (date, reportList) {
-	      var result = "";
-          angular.forEach(reportList, function(value, key) {
-              if(value.entryDate == date){
-                  result =  value.data;
-              }
-          });
+        if(reportList.data){
+            return reportList.data;
+        }
 
-          return result;
+
+          return "";
       };
 
-    $scope.addToPrescription = function (uDate, patientFollowUpList) {
+    $scope.addToPrescription = function (uDate, uniqueDate) {
         var result = "";
         var filteredDate = $filter('date')(uDate.entryDate, "yyyy-MM-dd");
         var jsonArray = [];
-        angular.forEach(patientFollowUpList, function(value, key) {
-            var invName = value.invName;
-            angular.forEach(value.invReportList, function(inv, key) {
-                if(inv.entryDate == uDate.entryDate){
-                    console.log(inv.data);
-                    var jsonItem = {data : invName + "-" + inv.data, entryDate : filteredDate};
-                    jsonArray.push(jsonItem);
-                }
-            });
+        angular.forEach(uniqueDate.followUpDataList, function(value, key) {
+            if(value.data != ''){
+                //checking list empty value
+                console.log(value.name + " --- " + value.data);
+                var jsonItem = {data : value.name + "-" + value.data};
+                jsonArray.push(jsonItem);
+
+            }
         });
 
-        var dataString = 'query=5'+ '&jsonArray=' + JSON.stringify(jsonArray);
+        var dataString = 'query=5'+ '&jsonArray=' + JSON.stringify(jsonArray) + "&entryDate=" + filteredDate ;
 
         $http({
             method: 'POST',
@@ -92,7 +98,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
                     data = inv.data
                 }
             });
-            var jsonItem = {invName : value.invName, data: data, patientFollowUpID : value.patientFollowUpID};
+            var jsonItem = {invName : value.invName, data: data, patientFollowUpID : value.followUpSerttingID};
             followUp.followUpList.push(jsonItem);
         });
         var modalInstance = $modal.open({
@@ -234,8 +240,8 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
     };
 
 	$scope.init = function (){
-		
-		
+
+
 		var dataString = "query=0";
 		
 		$http({
@@ -244,7 +250,7 @@ app.controller('FollowUpChartController', function($scope, $http, $modal, $rootS
             data: dataString,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function (result) {
-      	  $scope.patientFollowUpList = result;
+      	  $scope.patientFollowUpList = $filter('orderBy')(result, 'invName') ;
       	  $scope.bringFollowUpChart();
         });
 	};

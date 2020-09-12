@@ -15,6 +15,16 @@
         </h2>
         <span><textarea rows="3" style="width: 100%" data-ng-model="commentData.detail">{{commentData.detail}}</textarea></span>
     </div>
+
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <h2 class="item-head">
+            FollowUp Result
+        </h2>
+        <div data-ng-repeat="followUp in followUpDataList">
+            <span>{{followUp.detail}}</span>
+        </div>
+
+    </div>
     <div class="col-sm-6 col-md-6 col-lg-6">
     </div>
 </div>

@@ -18,7 +18,7 @@
                     <thead>
                         <tr>
                             <th class="col-lg-1">Inv Name </th>
-                            <th class="col-lg-1" data-ng-repeat="invData in patientFollowUpList">
+                            <th class="col-lg-1" data-ng-repeat="invData in patientFollowUpList | orderBy: 'invName'">
                                 <h4>{{invData.invName}}</h4>
                             </th>
                         </tr>
@@ -26,15 +26,15 @@
                     <tbody>
                         <tr data-ng-repeat="uDate in uniqueDateList">
                             <td class="col-lg-1" >
-                                <button data-ng-if="!uDate.editMode" class="btn btn-default" data-ng-click="addToPrescription(uDate, patientFollowUpList)">
+                                <button data-ng-if="!uDate.editMode" class="btn btn-default" data-ng-click="addToPrescription(uDate, uDate)">
                                     <span class="glyphicon  glyphicon" data-ng-class="{'glyphicon-check': uDate.addedToPrescription == true,'glyphicon-unchecked': uDate.addedToPrescription != true}"></span>
                                 </button>
                                 <a class="link" data-ng-if="!uDate.editMode" data-ng-click="editFinding(uDate, patientFollowUpList)">{{uDate.entryDate | date:'dd-MM-yy'}}</a>
                                 <input data-ng-if="uDate.editMode" ng-model="uDate.entryDate"  placeholder="Follow up Date" class="form-control required" datepicker-popup="dd/MM/yyyy" close-text="Close"  is-open="false"/>
                             </td>
-                            <td class="col-lg-1" data-ng-repeat="invData in patientFollowUpList">
-                                <label data-ng-if="!uDate.editMode">{{getFollowupResult(uDate.entryDate, invData.invReportList)}}</label>
-                                <input data-ng-if="uDate.editMode"type="text" placeholder="Finding..." class="form-control required" data-ng-model="uDate.data">
+                            <td class="col-lg-1" data-ng-repeat="fData in uDate.followUpDataList">
+                                <label data-ng-if="!fData.editMode">{{getFollowupResult(uDate, fData)}}</label>
+                                <input data-ng-if="fData.editMode"type="text" placeholder="Finding..." class="form-control required" data-ng-model="invData.data">
                             </td>
                         </tr>
                     </tbody>
